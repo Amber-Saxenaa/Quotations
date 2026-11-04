@@ -242,70 +242,11 @@ body.format-premium .paper{border-top:7px solid var(--red)}body.format-premium .
 @media(min-width:560px){.app.studio .parties{grid-template-columns:1fr 1fr}}
 .foot-brand{white-space:nowrap}
 </style>
-<style>
-/* ===== v11: redesigned shell — one screen, items editor + live preview ===== */
-[hidden]{display:none!important}
-#appRoot{display:block!important;min-height:100vh;background:#f6f2f1;color:#2a2224}
-.ap-top{position:sticky;top:0;z-index:40;height:56px;display:flex;align-items:center;gap:22px;padding:0 22px;background:#fff;border-bottom:1px solid #eadcdb}
-.ap-brand{display:flex;align-items:center;gap:10px;cursor:pointer}.ap-logo{height:36px!important;width:auto}.ap-brand b{display:block;font-size:15px;color:var(--maroon,#641d25);line-height:1.1}.ap-brand small{font-size:10px;color:#8a7b7d;letter-spacing:.6px}
-.ap-nav{display:flex;gap:2px;flex:1;overflow-x:auto}.ap-nav button{border:0;background:none;padding:8px 12px;border-radius:8px;font-size:13px;font-weight:600;color:#6d5f61;cursor:pointer;white-space:nowrap}.ap-nav button:hover{background:#f6eceb}.ap-nav button.on{background:#f3e3e2;color:var(--maroon,#641d25)}
-.ap-new{border:0;background:var(--maroon,#641d25);color:#fff;font-weight:700;padding:9px 16px;border-radius:9px;cursor:pointer;font-size:13px}.ap-new:hover{filter:brightness(1.12)}
-.nav-page{max-width:1240px;margin:0 auto;padding:26px 22px!important;grid-column:auto!important}
-.ap-edit{display:flex;flex-direction:column;height:calc(100vh - 56px)}
-.ap-bar{flex:none;display:flex;align-items:center;gap:12px;padding:9px 22px;background:#fff;border-bottom:1px solid #eadcdb;flex-wrap:wrap}
-.ap-title{display:flex;align-items:baseline;gap:10px}.ap-title h1{font-size:15px;margin:0;color:#2a2224}.ap-state{font-size:11px;color:#8a7b7d}
-.ap-spacer{flex:1}
-.fmt-switch{display:flex;border:1px solid #dcc9c8;border-radius:9px;overflow:hidden}.fmt-switch button{border:0;background:#fff;padding:7px 12px;font-size:12px;font-weight:600;color:#7d6f71;cursor:pointer}.fmt-switch button.on{background:var(--maroon,#641d25);color:#fff}
-.ap-btn{border:1px solid #dcc9c8;background:#fff;color:#4a3b3d;padding:7px 12px;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer}.ap-btn:hover{background:#faf3f2}.ap-btn.primary{background:var(--maroon,#641d25);border-color:var(--maroon,#641d25);color:#fff}.ap-btn.primary:hover{filter:brightness(1.12)}
-.ap-dl{display:flex;align-items:center;gap:6px;padding-left:12px;border-left:1px solid #eadcdb}.ap-dl span{font-size:11px;color:#8a7b7d}
-.ap-split{flex:1;min-height:0;display:grid;grid-template-columns:minmax(540px,1.12fr) minmax(380px,.88fr);gap:16px;padding:16px 22px 0}
-.ap-left,.ap-right{min-height:0;overflow:auto}.ap-left{display:flex;flex-direction:column;gap:14px;padding-bottom:40px}
-.ap-card{background:#fff;border:1px solid #eadcdb;border-radius:14px;padding:16px 18px}
-.ap-card h2,.ap-card>summary{font-size:12.5px;letter-spacing:.7px;text-transform:uppercase;color:var(--maroon,#641d25);margin:0 0 6px;font-weight:800}
-details.ap-card>summary{cursor:pointer;margin:0}details.ap-card[open]>summary{margin-bottom:8px}
-.ap-row2{display:grid;grid-template-columns:1.25fr 1fr;gap:14px}
-.ap-card label{display:block;font-size:11.5px;font-weight:600;color:#6d5f61;margin:9px 0 3px}
-.ap-card input:not([type=checkbox]):not([type=color]):not([type=range]),.ap-card textarea,.ap-card select{width:100%;box-sizing:border-box;border:1px solid #e0d2d1;border-radius:8px;padding:7px 9px;font-size:13px;background:#fff;font-family:inherit}
-.ap-card input:focus,.ap-card textarea:focus,.ap-card select:focus{outline:2px solid #ecd2d5;border-color:var(--maroon,#641d25)}
-.ap-card textarea{min-height:64px;resize:vertical}.ap-card .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.ap-ihead{display:flex;align-items:center;justify-content:space-between;gap:10px}.ap-count{background:#f3e3e2;color:var(--maroon,#641d25);border-radius:999px;padding:1px 9px;font-size:11px;margin-left:6px}
-.ap-tools{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;margin-top:6px}
-.ap-search{position:relative;flex:1 1 280px}.ap-search input{font-size:13.5px!important;padding:10px 12px!important;border-color:#d9bcbf!important}
-.ap-results{position:absolute;left:0;right:0;top:calc(100% + 4px);background:#fff;border:1px solid #dcc9c8;border-radius:10px;box-shadow:0 12px 28px #34171a26;z-index:20;max-height:320px;overflow:auto}
-.ap-res{display:grid;grid-template-columns:1fr auto;gap:0 10px;padding:9px 12px;cursor:pointer;border-bottom:1px solid #f4eceb}.ap-res:hover{background:#fbf3f2}.ap-res small{grid-column:1;color:#8a7b7d;font-size:11px}.ap-res span{grid-row:1/3;grid-column:2;align-self:center;font-weight:700;color:var(--maroon,#641d25)}.ap-res.empty{color:#8a7b7d;font-size:12px;display:block}
-.ap-sec{flex:0 1 190px}.ap-sec label{margin-top:0}
-.ap-edit .chipbar{margin:10px 0 4px}.ap-edit .fmtbar{position:static;margin:8px 0 0}
-.ed-wrap{overflow:auto;max-height:44vh;border:1px solid #eadcdb;border-radius:10px;margin-top:8px}
-#itemsEditor{border-collapse:separate;border-spacing:0;width:100%;font-size:12.5px}
-#itemsEditor th{position:sticky;top:0;z-index:2;background:#f8efee;color:#6d4a4e;font-size:11px;font-weight:700;text-align:left;padding:8px 6px;border-bottom:1px solid #eadcdb;white-space:nowrap;cursor:pointer;user-select:none}
-#itemsEditor td{padding:2px 3px;border-bottom:1px solid #f4eceb;vertical-align:middle}
-#itemsEditor td input{width:100%;box-sizing:border-box;border:1px solid transparent;background:transparent;padding:6px 6px;border-radius:6px;font-size:12.5px;font-family:inherit;min-width:48px}
-#itemsEditor td input:hover{border-color:#e6d6d5;background:#fff}#itemsEditor td input:focus{border-color:var(--maroon,#641d25);background:#fff;outline:none;box-shadow:0 0 0 3px #f1dcde}
-#itemsEditor td input[type=number]{text-align:right}
-#itemsEditor .ed-n{width:28px;color:#a69798;text-align:center;font-size:11px}#itemsEditor .ed-calc{text-align:right;padding:0 8px;white-space:nowrap;font-variant-numeric:tabular-nums;color:#4a3b3d;background:#fcf9f8}
-#itemsEditor .ed-img{width:54px;text-align:center;position:relative;cursor:pointer}#itemsEditor .ed-img img{max-width:44px;max-height:34px;display:block;margin:auto}#itemsEditor .ed-img>span{color:#b49a9d;font-size:16px}#itemsEditor .ed-x{position:absolute;top:0;right:0;font-size:10px;background:#8f2733;color:#fff;border-radius:50%;width:14px;height:14px;line-height:14px;display:none}#itemsEditor .ed-img:hover .ed-x{display:block}
-#itemsEditor .ed-img.dragover{outline:2px dashed #5b7399;background:#eaf0fb}
-#itemsEditor .ed-a{white-space:nowrap;width:56px}#itemsEditor .ed-a button{border:0;background:none;cursor:pointer;opacity:.45;font-size:13px}#itemsEditor tr:hover .ed-a button{opacity:1}
-#itemsEditor .icol,#itemsEditor td.icol input{background:#eef2fa}#itemsEditor th.icol{background:#dfe6f3;color:#2c4470}
-#itemsEditor th.sel{outline:2px solid #5b7399;outline-offset:-2px}#itemsEditor td.sel{background:#e4ecf8}
-.ap-empty{padding:26px;text-align:center;color:#8a7b7d;font-size:13px}
-.ap-sum{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:flex-end;margin-top:12px}.ap-sumin{display:flex;gap:10px}.ap-sumin label{margin:0}.ap-sumin input{width:110px!important}
-.ap-sumnum{display:flex;gap:18px;align-items:flex-end}.ap-sumnum div{display:flex;flex-direction:column;align-items:flex-end}.ap-sumnum span{font-size:10.5px;color:#8a7b7d;text-transform:uppercase;letter-spacing:.5px}.ap-sumnum b{font-size:14px;font-variant-numeric:tabular-nums}.ap-sumnum .grand b{font-size:20px;color:var(--maroon,#641d25)}
-.ap-right{background:#ece6e5;border-radius:14px;display:flex;flex-direction:column;overflow:hidden}
-.ap-pvbar{flex:none;display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#fff;border-bottom:1px solid #eadcdb;font-size:12px;font-weight:700;color:#6d5f61}.ap-pvbar div{display:flex;gap:4px;align-items:center}.ap-pvbar button{border:1px solid #dcc9c8;background:#fff;border-radius:6px;padding:3px 9px;cursor:pointer}.ap-pvbar #pvZ{min-width:44px;text-align:center;font-weight:600}
-.ap-pvscroll{flex:1;min-height:0;overflow:auto;padding:14px}
-.ap-edit .paper{width:794px;max-width:none;margin:0 auto;box-shadow:0 8px 30px #34171a26}.ap-edit .paper.land{width:1123px}
-.ap-drawer{position:fixed;top:56px;right:0;bottom:0;width:392px;max-width:100%;background:#fff;border-left:1px solid #eadcdb;box-shadow:-10px 0 30px #34171a1f;z-index:35;overflow:auto;padding:0 16px 30px}
-.ap-dhead{position:sticky;top:0;background:#fff;display:flex;justify-content:space-between;align-items:center;padding:14px 0 10px;font-size:14px;z-index:2}.ap-dhead button{border:0;background:none;font-size:18px;cursor:pointer}
-.ap-drawer .panel{border:1px solid #eadcdb;border-radius:12px;padding:14px;margin-bottom:12px;background:#fff}
-.ap-drawer .panel h3{font-size:12px;letter-spacing:.7px;color:var(--maroon,#641d25);margin:0 0 6px}
-@media(max-width:1100px){.ap-edit{height:auto}.ap-split{grid-template-columns:1fr}.ap-left,.ap-right{overflow:visible}.ap-row2{grid-template-columns:1fr}.ap-dl{border-left:0;padding-left:0}}
-@media print{.ap-top,.ap-bar,.ap-left,.ap-pvbar,.ap-drawer,.nav-page{display:none!important}.ap-edit,.ap-split,.ap-right,.ap-pvscroll{display:block!important;height:auto!important;overflow:visible!important;padding:0!important;background:none!important}.ap-edit .paper,.ap-edit .paper.land{zoom:1!important;width:100%!important;box-shadow:none!important}}
-</style>
 </head>
-<body>
+<body class="format-section">
 <div class="app" id="appRoot">
-<div id="legacy" hidden><aside class="sidebar">
+
+  <aside class="sidebar">
     <div class="brand"><div class="brand-mark">TBHS</div><small>THE BIG HOTEL STORE</small></div>
     <nav class="nav">
       <button onclick="showAppPage('Dashboard')"><span>⌂</span><span class="navtext">Dashboard</span></button>
@@ -318,7 +259,10 @@ details.ap-card>summary{cursor:pointer;margin:0}details.ap-card[open]>summary{ma
       <button onclick="showAppPage('Settings')"><span>⚙</span><span class="navtext">Settings</span></button>
     </nav>
     <div class="sidefoot">Your Partner in Hospitality Excellence</div>
-  </aside><section class="landing" id="landingPage">
+  </aside>
+
+
+<section class="landing" id="landingPage">
  <div class="landing-inner">
   <div class="landing-brand"><div class="landing-logo">TBHS</div><div><strong>THE BIG HOTEL STORE</strong><small>HOTELWARE · KITCHEN EQUIPMENT · HOSPITALITY SOLUTIONS</small></div></div>
   <div class="landing-eyebrow">Quotation Studio</div><div class="landing-title-row"><h1>Create a new quotation</h1><button class="create-btn heading-create-btn" onclick="startCreate()">Create Quotation&nbsp; →</button></div>
@@ -357,68 +301,89 @@ details.ap-card>summary{cursor:pointer;margin:0}details.ap-card[open]>summary{ma
 
 
 
-  <aside class="editor"></aside><main class="workspace"></main><input id="productSearch"><span id="catalogCount"></span><div id="catalogueList"></div><select id="formatSelect"><option value="classic">A</option><option value="section">B</option><option value="premium">C</option></select></div>
-<header class="ap-top"><div class="ap-brand" onclick="showAppPage('Dashboard')"><img class="logo-img ap-logo" alt=""><div><b>Quotation Studio</b><small>THE BIG HOTEL STORE</small></div></div><nav class="ap-nav" id="apNav"></nav><button class="ap-new" onclick="newQuote()">＋ New quotation</button></header>
-<section class="nav-page" id="navPage" style="display:none"><div class="nav-page-head"><div><h1 id="navPageTitle">Dashboard</h1><p id="navPageSubtitle"></p></div><button class="btn primary" onclick="showAppPage('Create Quotation')">+ New Quotation</button></div><div id="navPageContent"></div></section>
+  <section class="nav-page" id="navPage" style="display:none"><div class="nav-page-head"><div><h1 id="navPageTitle">Dashboard</h1><p id="navPageSubtitle"></p></div><button class="btn primary" onclick="showAppPage('Create Quotation')">+ New Quotation</button></div><div id="navPageContent"></div></section>
 
-  
-<main id="viewEditor" class="ap-edit" hidden>
-<div class="ap-bar">
-<div class="ap-title"><h1 id="studioTitle">Quotation</h1><span class="ap-state" id="saveState">Draft</span></div>
-<div class="fmt-switch" id="fmtSwitch"><button data-f="classic" onclick="setFormat('classic')">A · Classic</button><button data-f="section" onclick="setFormat('section')">B · Section</button><button data-f="premium" onclick="setFormat('premium')">C · Premium</button></div>
-<div class="ap-spacer"></div>
-<button class="ap-btn" onclick="toggleDrawer()">⚙ Customize</button><button class="ap-btn" onclick="saveQuote()">💾 Save</button><button class="ap-btn" onclick="window.print()">🖨 Print</button>
-<div class="ap-dl"><span>Download</span><button class="ap-btn primary" onclick="exportExcel()">Excel</button><button class="ap-btn primary" onclick="exportPDF()">PDF</button><button class="ap-btn primary" onclick="exportCSV()">CSV</button></div>
-</div>
-<div class="ap-split">
-<section class="ap-left">
-<div class="ap-row2">
-<div class="ap-card"><h2>Customer</h2>
+  <aside class="editor">
+    <button class="btn back-btn" onclick="backToFormats()">← Back to formats</button><h1>Edit Quotation</h1><div class="sub">Test version · Local demo data</div>
+    <div class="steps"><div class="step active">1 Details</div><div class="step active">2 Products</div><div class="step active">3 Preview</div></div>
+    <section class="panel" id="companyPanel">
+      <h3>COMPANY LETTERHEAD</h3>
+      <label>Address</label><input id="companyAddr" placeholder="Branch / address line" oninput="companySave()">
+      <div class="two"><div><label>Phone</label><input id="companyPhone" placeholder="+91 …" oninput="companySave()"></div><div><label>Email</label><input id="companyEmail" placeholder="sales@…" oninput="companySave()"></div></div>
+      <p class="mini-note">Shown on one line under the company name on every quotation and PDF. Saved once for all formats.</p>
+    </section>
+    <section class="panel">
+      <h3>QUOTATION DETAILS</h3>
+      <label>Quotation No.</label><input id="quoteNo" value="QT-TBHS-EQP-000001">
+      <div class="two"><div><label>Date</label><input id="quoteDate" type="date"></div><div><label>Expiry Date</label><input id="expiryDate" type="date"></div></div>
+      <label>Prepared By</label><input id="preparedBy" placeholder="Employee name">
+    </section>
+    <section class="panel">
+      <h3>CUSTOMER DETAILS</h3>
       <label>Customer / Hotel Name *</label><input id="customerName" value="Sample Hotel & Resort" placeholder="Customer name">
       <label>Address</label><textarea id="customerAddress">Lucknow, Uttar Pradesh</textarea>
       <div class="two"><div><label>GSTIN</label><input id="customerGST" placeholder="Customer GSTIN"></div><div><label>Contact Person</label><input id="contactPerson" placeholder="Contact name"></div></div>
       <div class="two"><div><label>Mobile</label><input id="customerMobile" placeholder="Phone"></div><div><label>Email</label><input id="customerEmail" placeholder="Email"></div></div>
-    </div>
-<div class="ap-card"><h2>Quotation</h2>
-      <label>Quotation No.</label><input id="quoteNo" value="QT-TBHS-EQP-000001">
-      <div class="two"><div><label>Date</label><input id="quoteDate" type="date"></div><div><label>Expiry Date</label><input id="expiryDate" type="date"></div></div>
-      <label>Prepared By</label><input id="preparedBy" placeholder="Employee name">
-    </div>
-</div>
-<div class="ap-card ap-items">
-<div class="ap-ihead"><h2>Items <span class="ap-count" id="itemCount">0</span></h2><span style="font-size:11px;color:#8a7b7d">Press <b>/</b> to search · <b>Enter</b> adds · arrow keys move between rows</span></div>
-<div class="ap-tools"><div class="ap-search"><input id="apSearch" placeholder="🔍  Search product, brand, code or model…" autocomplete="off" oninput="apFind()" onfocus="apFind()" onblur="setTimeout(()=>document.getElementById('apResults').hidden=true,150)" onkeydown="apKey(event)"><div class="ap-results" id="apResults" hidden></div></div>
-<div class="ap-sec"><label>Add to section</label><input id="addSection" list="secList" placeholder="e.g. CROCKERY"></div>
-<button class="ap-btn" onclick="addBlank()">＋ Blank line</button><button class="ap-btn" onclick="showAppPage('Product Catalogue')">⬆ Import price lists</button><button class="ap-btn" id="intBtn" onclick="toggleInternal()" title="Show every internal column at once">👁 All internal</button></div>
-<div id="colChips" class="chipbar no-print"></div>
-<div id="fmtBar" class="fmtbar" style="display:none"><b id="fmtTarget">—</b><label>Size <button onclick="stStep(-10)">−</button><output id="fmtSize">100%</output><button onclick="stStep(10)">＋</button></label><label>Colour <input type="color" id="fmtColor" value="#222222" oninput="stSet('color',this.value)"></label><label><input type="checkbox" id="fmtBold" onchange="stSet('bold',this.checked)"> Bold</label><select id="fmtScope" onchange="updFmtBar()"><option value="body">Applies to: cells</option><option value="head">Applies to: header</option></select><button id="fmtToCol" onclick="cellsToCols()">Select whole column</button><button onclick="stClear()">Reset</button><button onclick="selClear()">✕</button></div>
-<div class="ed-wrap" id="edWrap"><table id="itemsEditor"></table></div>
-<div class="ap-empty" id="apEmpty">No products yet. Search above to add the first one, or press <b>＋ Blank line</b>.</div>
-<datalist id="secList"></datalist>
-<div class="ap-sum"><div class="ap-sumin"><label>Default GST %<input id="defaultGST" type="number" min="0" max="100" value="18" oninput="liveUpdate()"></label><label>Overall discount %<input id="globalDiscount" type="number" min="0" max="100" value="0" oninput="liveUpdate()"></label></div>
-<div class="ap-sumnum"><div><span>Basic</span><b id="tBasic">₹ 0.00</b></div><div><span>Discount</span><b id="tDisc">₹ 0.00</b></div><div><span>GST</span><b id="tGst">₹ 0.00</b></div><div class="grand"><span>Grand total</span><b id="tTotal">₹ 0.00</b></div></div></div>
-</div>
-<details class="ap-card"><summary>Billing partner &amp; bank</summary>
+    </section>
+    <section class="panel">
+      <h3>BILLING PARTNER</h3>
       <label>Company / Partner</label><input id="partnerName" value="TBHS Billing Partner">
       <div class="two"><div><label>Bank</label><input id="bankName" placeholder="Bank name"></div><div><label>Branch</label><input id="bankBranch" placeholder="Branch"></div></div>
       <div class="two"><div><label>A/C No.</label><input id="bankAccount" placeholder="Account number"></div><div><label>IFSC</label><input id="bankIFSC" placeholder="IFSC"></div></div>
       <label>Order By / Reference</label><input id="orderBy" placeholder="Contact or reference">
-    </details>
-<details class="ap-card"><summary>Specification &amp; terms</summary><label>Specification</label>
+    </section>
+    <section class="panel">
+      <h3>CUSTOM ITEMS SPECIFICATION</h3>
       <textarea id="specifications" placeholder="Special requirements, specifications, delivery notes...">Demo specification — replace this text with the actual project requirements.</textarea>
-    <label>Terms & Conditions</label><textarea id="terms">1. Prices are subject to final confirmation.
+    </section>
+    <section class="panel" id="layoutPanel">
+      <h3>LAYOUT &amp; STYLE</h3>
+      <label>Accent colour</label><input type="color" id="layAccent" value="#641d25" oninput="laySet('accent',this.value)">
+      <div class="two"><div><label>Page orientation</label><select id="layOrient" onchange="laySet('orient',this.value)"><option value="auto">Auto</option><option value="portrait">Portrait</option><option value="landscape">Landscape</option></select></div></div>
+      <label>Text size</label><div id="szBox"></div>
+      <label>Paper size (PDF)</label><select id="layPaper" onchange="laySet('paper',this.value)"><option value="a4">A4 (standard)</option><option value="a3">A3 (more room for many columns)</option></select>
+      <label>Show on quotation</label>
+      <div class="chk-grid"><label><input type="checkbox" data-k="head" checked onchange="layHide('head',!this.checked)"> Letterhead</label><label><input type="checkbox" data-k="ribbon" checked onchange="layHide('ribbon',!this.checked)"> Ribbon</label><label><input type="checkbox" data-k="parties" checked onchange="layHide('parties',!this.checked)"> Bill to / partner</label><label><input type="checkbox" data-k="spec" checked onchange="layHide('spec',!this.checked)"> Specification</label><label><input type="checkbox" data-k="terms" checked onchange="layHide('terms',!this.checked)"> Terms</label><label><input type="checkbox" data-k="sign" checked onchange="layHide('sign',!this.checked)"> Signatures</label><label><input type="checkbox" data-k="foot" checked onchange="layHide('foot',!this.checked)"> Footer</label></div>
+      <div class="defbox"><b>Defaults for all formats</b><small>Layout, text sizes and column styles apply to formats A, B and C alike. Save them as your default to come back to them any time.</small><button class="btn primary" onclick="saveDefaults()">⭐ Save current as default</button><button class="btn" onclick="restoreDefaults()">↺ Back to my default</button><button class="btn" onclick="factoryReset()">Factory settings</button></div>
+      <div class="actions"><button class="btn" onclick="openCols()">⚙ Edit columns</button></div>
+    </section>
+    <section class="panel">
+      <h3>QUOTATION SETTINGS</h3>
+      <label>Design Format</label>
+      <select id="formatSelect" onchange="setFormat(this.value)">
+        <option value="classic">Format A — Classic</option>
+        <option value="section" selected>Format B — Section Wise</option>
+        <option value="premium">Format C — Premium</option>
+      </select>
+      <div class="two"><div><label>GST default (%)</label><input id="defaultGST" type="number" min="0" max="100" value="18" onchange="renderQuote()"></div><div><label>Global discount (%)</label><input id="globalDiscount" type="number" min="0" max="100" value="0" onchange="renderQuote()"></div></div>
+      <label>Terms & Conditions</label><textarea id="terms">1. Prices are subject to final confirmation.
 2. Delivery and installation as mutually agreed.
 3. Taxes are calculated as shown in this quotation.
-4. Quotation valid until the expiry date mentioned above.</textarea></details>
-<details class="ap-card"><summary>Add a new product to the catalogue</summary>
+4. Quotation valid until the expiry date mentioned above.</textarea>
+      <div class="actions"><button class="btn primary" onclick="renderQuote()">Update Preview</button><button class="btn" onclick="saveQuote()">Save Test Quote</button></div>
+    </section>
+    <section class="panel" id="catalogPanel">
+      <h3>PRODUCT CATALOGUE <span class="badge" id="catalogCount">8 demo items</span></h3>
+      <input class="product-search" id="productSearch" placeholder="Search brand, code, model, product..." oninput="renderCatalogue()">
+      <div id="catalogueList"></div>
+      <details style="margin-top:10px"><summary style="font-size:12px;color:var(--maroon);cursor:pointer;font-weight:700">+ Add a catalogue product</summary>
         <label>Product name</label><input id="newName" placeholder="e.g. Soup Bowl">
         <div class="two"><div><label>Brand</label><input id="newBrand" placeholder="Brand"></div><div><label>Item code</label><input id="newCode" placeholder="Code"></div></div>
         <div class="two"><div><label>Model</label><input id="newModel" placeholder="Model"></div><div><label>Unit</label><input id="newUnit" value="PCS"></div></div>
         <div class="two"><div><label>Rate (₹)</label><input id="newRate" type="number" value="0"></div><div><label>GST %</label><input id="newGST" type="number" value="18"></div></div>
         <div class="actions"><button class="btn primary" onclick="addCatalogueProduct()">Add Product</button></div>
       </details>
-</section>
-<section class="ap-right"><div class="ap-pvbar"><span>Live preview</span><div><button onclick="pvZoom(-1)">−</button><span id="pvZ">Fit</span><button onclick="pvZoom(1)">＋</button><button onclick="pvFit()">Fit</button></div></div><div class="ap-pvscroll" id="pvScroll"><article class="paper" id="paper">
+      <p class="mini-note" style="margin-top:12px">Demo catalogue is stored in this browser only. Importing your real Excel/PDF catalogue and connecting a shared database will be a later step.</p>
+    </section>
+  </aside>
+
+  <main class="workspace">
+    <div class="topbar">
+      <div class="studio-left"><button class="btn" onclick="backToFormats()">← Formats</button><div><h1 id="studioTitle">Quotation</h1><p>Click any table cell to edit · double-click a block to edit it in the panel</p></div></div>
+      <div class="fmt-switch" id="fmtSwitch"><button data-f="classic" onclick="setFormat('classic')">A · Classic</button><button data-f="section" onclick="setFormat('section')">B · Section</button><button data-f="premium" onclick="setFormat('premium')">C · Premium</button></div>
+      <div class="top-actions"><button class="btn" onclick="openCols()">⚙ Columns</button><button class="btn" id="intBtn" onclick="toggleInternal()" title="Show internal columns on screen">👁 Internal</button><button class="btn" onclick="togglePanel()">☰ Customize</button><span class="dl-label">Download</span><button class="btn primary" onclick="exportExcel()">Excel</button><button class="btn primary" onclick="exportPDF()">PDF</button><button class="btn primary" onclick="exportCSV()">CSV</button><button class="btn" onclick="window.print()">🖨</button><button class="btn" onclick="saveQuote()">💾 Save</button></div>
+    </div>
+    <div class="preview-wrap"><article class="paper" id="paper">
       <header class="paper-head">
         <div class="logo"><img class="logo-img" alt="TBHS logo"><div class="logo-text">THE BIG HOTEL STORE</div></div>
         <div class="head-contact" id="headContact"></div>
@@ -430,36 +395,18 @@ details.ap-card>summary{cursor:pointer;margin:0}details.ap-card[open]>summary{ma
         <section class="party"><h3>BILLING PARTNER</h3><div id="partnerPreview"></div></section>
       </div>
       <div class="spec"><b>Custom Items Specification</b><div id="specPreview"></div></div>
-      
-      
+      <div id="colChips" class="chipbar no-print"></div>
+      <div id="fmtBar" class="fmtbar no-print" style="display:none"><b id="fmtTarget">—</b><label>Size <button onclick="stStep(-10)">−</button><output id="fmtSize">100%</output><button onclick="stStep(10)">＋</button></label><label>Colour <input type="color" id="fmtColor" value="#222222" oninput="stSet('color',this.value)"></label><label><input type="checkbox" id="fmtBold" onchange="stSet('bold',this.checked)"> Bold</label><select id="fmtScope" onchange="updFmtBar()"><option value="body">Applies to: cells</option><option value="head">Applies to: header</option></select><button id="fmtToCol" onclick="cellsToCols()">Select whole column</button><button onclick="stClear()">Reset</button><button onclick="selClear()">✕</button></div>
       <div id="itemsPreview"></div>
       <table class="final-totals" id="finalTotals"></table>
       <section class="terms"><b>TERMS & CONDITIONS</b><div id="termsPreview"></div></section>
       <div class="signature"><div class="signline">Customer Acceptance / Signature</div><div class="signline">For The Big Hotel Store</div></div>
       <footer class="paper-foot"><span class="foot-brand"><img class="logo-img foot-logo" alt="">www.thebighotelstore.com · Test template — verify all details</span><span id="pageLabel">Page 1</span></footer>
-    </article></div></section>
+    </article></div>
+  </main>
 </div>
-</main>
-<aside class="ap-drawer" id="drawer" hidden><div class="ap-dhead"><b>Customize</b><button onclick="toggleDrawer()">✕</button></div><section class="panel" id="companyPanel">
-      <h3>COMPANY LETTERHEAD</h3>
-      <label>Address</label><input id="companyAddr" placeholder="Branch / address line" oninput="companySave()">
-      <div class="two"><div><label>Phone</label><input id="companyPhone" placeholder="+91 …" oninput="companySave()"></div><div><label>Email</label><input id="companyEmail" placeholder="sales@…" oninput="companySave()"></div></div>
-      <p class="mini-note">Shown on one line under the company name on every quotation and PDF. Saved once for all formats.</p>
-    </section><section class="panel" id="layoutPanel">
-      <h3>LAYOUT &amp; STYLE</h3>
-      <label>Accent colour</label><input type="color" id="layAccent" value="#641d25" oninput="laySet('accent',this.value)">
-      <div class="two"><div><label>Page orientation</label><select id="layOrient" onchange="laySet('orient',this.value)"><option value="auto">Auto</option><option value="portrait">Portrait</option><option value="landscape">Landscape</option></select></div></div>
-      <label>Text size</label><div id="szBox"></div>
-      <label>Paper size (PDF)</label><select id="layPaper" onchange="laySet('paper',this.value)"><option value="a4">A4 (standard)</option><option value="a3">A3 (more room for many columns)</option></select>
-      <label>Show on quotation</label>
-      <div class="chk-grid"><label><input type="checkbox" data-k="head" checked onchange="layHide('head',!this.checked)"> Letterhead</label><label><input type="checkbox" data-k="ribbon" checked onchange="layHide('ribbon',!this.checked)"> Ribbon</label><label><input type="checkbox" data-k="parties" checked onchange="layHide('parties',!this.checked)"> Bill to / partner</label><label><input type="checkbox" data-k="spec" checked onchange="layHide('spec',!this.checked)"> Specification</label><label><input type="checkbox" data-k="terms" checked onchange="layHide('terms',!this.checked)"> Terms</label><label><input type="checkbox" data-k="sign" checked onchange="layHide('sign',!this.checked)"> Signatures</label><label><input type="checkbox" data-k="foot" checked onchange="layHide('foot',!this.checked)"> Footer</label></div>
-      <div class="defbox"><b>Defaults for all formats</b><small>Layout, text sizes and column styles apply to formats A, B and C alike. Save them as your default to come back to them any time.</small><button class="btn primary" onclick="saveDefaults()">⭐ Save current as default</button><button class="btn" onclick="restoreDefaults()">↺ Back to my default</button><button class="btn" onclick="factoryReset()">Factory settings</button></div>
-      <div class="actions"><button class="btn" onclick="openCols()">⚙ Edit columns</button></div>
-    </section></aside>
 <dialog id="colDlg"><h2>Quotation columns</h2><p class="mini-note"><b>Formula</b> columns calculate automatically from other columns (use the "key" shown, e.g. <code>qty*rate*(1-discount/100)</code>). <b>Internal</b> columns (cost, margin, notes) show on screen when 👁 is on but never reach the PDF or print. <b>Hide</b> removes a column everywhere. Widths rebalance automatically so the PDF never breaks.</p><div id="colList"></div><div class="actions"><button class="btn" onclick="colAdd(cols.length-1)">+ Add column at end</button><button class="btn" onclick="colReset()">Reset to default</button><button class="btn primary" onclick="document.getElementById('colDlg').close()">Done</button></div></dialog>
 <div class="toast" id="toast"></div>
-
-</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
@@ -752,7 +699,7 @@ function renderCataloguePage(){const br=[...new Set(catalogue.map(p=>p.brand||"�
 const _sp=showAppPage;showAppPage=function(p){_sp(p);if(p==="Product Catalogue")drawCatTable()};
 function addProduct(p){const sec=(document.getElementById("addSection").value||"").trim()||p.category||"General";items.push({id:Date.now()+Math.random(),section:sec,code:p.code||"",name:p.name||"New product",brand:p.brand||"",model:p.model||"",type:p.type||p.category||"",...sizeParts(p.size),qty:1,unit:p.unit||"PCS",rate:num(p.rate),discount:num(p.discount),gst:p.gst===undefined||p.gst===""?num(val("defaultGST")):num(p.gst)});renderQuote();toast("Added: "+(p.name||"item"))}
 function renderCatalogue(){const q=val("productSearch").toLowerCase().trim(),L=catalogue.filter(p=>!q||[p.name,p.brand,p.code,p.model,p.category].join(" ").toLowerCase().includes(q));document.getElementById("catalogCount").textContent=catalogue.length+" items";document.getElementById("catalogueList").innerHTML=L.slice(0,40).map(p=>`<div class="catalogue-item"><div><b>${esc(p.name)}</b><small>${esc(p.brand)} · ${esc(p.code)} · ${money(p.rate)} · ${num(p.discount)}% off</small></div><button class="btn small" onclick="addFromCatalogue(${p.id})">+ Add</button></div>`).join("")+(L.length>40?`<p class="mini-note">Showing 40 of ${L.length} — type to narrow.</p>`:"")||'<p class="mini-note">No matching products.</p>'}
-
+document.getElementById("productSearch").insertAdjacentHTML("beforebegin",'<label>Add items to section</label><input id="addSection" placeholder="e.g. CROCKERY (blank = product category)" style="margin-bottom:8px">');
 renderCatalogue();
 </script>
 <script>
@@ -890,69 +837,6 @@ function companySave(){try{localStorage.setItem("tbhs_company",JSON.stringify({a
 const _rq6=renderQuote;renderQuote=function(){_rq6();const h=document.getElementById("headContact"),l=coLine();if(h)h.innerHTML=l?esc(l):'<span class="no-print head-hint">Add address · phone · email in the Details tab</span>'};
 (function(){const c=coGet();document.getElementById("companyAddr").value=c.addr;document.getElementById("companyPhone").value=c.phone;document.getElementById("companyEmail").value=c.email})();
 renderQuote();
-</script>
-<script>
-/* ===== v11: new shell logic ===== */
-const $id=i=>document.getElementById(i),ED="#itemsEditor";
-let skipEd=false,edMore=false,pvMode="fit",pvZ=1,tmrP,tmrD;
-const MORE=["type","image","brand","model"];
-const edCols=()=>outCols(false).filter(c=>c.type!=="auto"&&(edMore||!MORE.includes(c.key)));
-function edCell(i,c){const k=c.key,ic=c.internal?" icol":"";
- if(c.type==="formula")return`<td class="ed-calc${ic}" data-col="${k}" data-calc="${k}">${esc(fmtVal(cellVal(i,c,0),c))}</td>`;
- if(c.type==="image")return`<td class="ed-img${ic}" data-col="${k}" data-img="${i.id}">${i.image?`<img src="${i.image}" alt=""><span class="ed-x" title="Remove image">×</span>`:"<span>＋</span>"}</td>`;
- const w=k==="name"?220:k==="code"?100:k==="unit"||k==="gst"||k==="qty"?62:86;
- return`<td class="${ic}" data-col="${k}" style="min-width:${w}px"><input ${c.type==="number"?'type="number" step="any"':""} data-f="${k}" value="${esc(i[k]??"")}"></td>`}
-function renderEditor(){const C=edCols(),T=document.querySelector(ED),act=document.activeElement,keep=act&&act.dataset&&act.dataset.f?{id:act.closest("tr").dataset.id,f:act.dataset.f}:null;
- T.innerHTML=`<thead><tr><th class="ed-n">#</th><th style="min-width:110px">Section</th>${C.map(c=>`<th data-col="${c.key}" class="${c.internal?"icol":""}" title="Click to select this column for text styling">${esc(c.label)}</th>`).join("")}<th></th></tr></thead><tbody>${items.map((i,n)=>`<tr data-id="${i.id}"><td class="ed-n">${n+1}</td><td><input list="secList" data-f="section" value="${esc(i.section||"")}"></td>${C.map(c=>edCell(i,c)).join("")}<td class="ed-a"><button title="Duplicate line" onclick="dupItem('${i.id}')">⧉</button><button title="Remove line" onclick="delItem('${i.id}')">🗑</button></td></tr>`).join("")}</tbody>`;
- $id("apEmpty").hidden=items.length>0;$id("edWrap").hidden=!items.length;
- $id("secList").innerHTML=[...new Set(["CROCKERY","CUTLERY","GLASSWARE","HOLLOWARE",...items.map(i=>i.section).filter(Boolean)])].map(s=>`<option value="${esc(s)}">`).join("");
- if(keep){const el=T.querySelector(`tr[data-id="${keep.id}"] [data-f="${keep.f}"]`);el&&el.focus()}paintSel()}
-function updRowCalc(){document.querySelectorAll(ED+" tbody tr[data-id]").forEach(tr=>{const it=itOf(tr.dataset.id);if(!it)return;tr.querySelectorAll("[data-calc]").forEach(td=>{const c=colOf(td.dataset.calc);if(c)td.textContent=fmtVal(cellVal(it,c,0),c)})})}
-function updateSummary(){const t=computeTotals();$id("tBasic").textContent=money(t.basic);$id("tDisc").textContent=(t.disc?"− ":"")+money(t.disc);$id("tGst").textContent=money(t.gst);$id("tTotal").textContent=money(t.total);$id("itemCount").textContent=items.length}
-function liveUpdate(){updRowCalc();updateSummary();clearTimeout(tmrP);tmrP=setTimeout(()=>{skipEd=true;renderQuote();skipEd=false},140)}
-function dupItem(id){const i=itOf(id);if(!i)return;items.splice(items.indexOf(i)+1,0,Object.assign({},i,{id:Date.now()+Math.random()}));renderQuote()}
-function delItem(id){const i=itOf(id);if(i&&confirm("Remove this line from the quotation?")){items.splice(items.indexOf(i),1);renderQuote()}}
-/* add-product search */
-function apHits(){const q=$id("apSearch").value.toLowerCase().trim();return catalogue.filter(p=>!q||[p.name,p.brand,p.code,p.model,p.category].join(" ").toLowerCase().includes(q))}
-function apFind(){const b=$id("apResults"),L=apHits().slice(0,8);b.innerHTML=L.length?L.map(p=>`<div class="ap-res" onmousedown="event.preventDefault();addFromCatalogue(${p.id})"><b>${esc(p.name)}</b><small>${esc(p.brand||"")} · ${esc(p.code||"")} · ${esc(p.model||"")} · ${num(p.discount)}% off</small><span>${money(p.rate)}</span></div>`).join(""):'<div class="ap-res empty">No match. Import a price list or add a new product below.</div>';b.hidden=false}
-function apKey(e){if(e.key==="Escape"){$id("apResults").hidden=true;e.target.blur()}if(e.key==="Enter"){const p=apHits()[0];if(p){e.preventDefault();addFromCatalogue(p.id)}}}
-const _apd=addProduct;addProduct=function(p){_apd(p);setTimeout(()=>{const q=document.querySelector(ED+" tbody tr:last-child [data-f='qty']");if(q){q.focus();q.select()}},30)};
-/* preview zoom */
-function pvApply(){const sc=$id("pvScroll"),p=$id("paper");if(!sc||!p)return;p.style.zoom=1;const w=p.offsetWidth||794;let z=pvMode==="fit"?Math.min(1.2,(sc.clientWidth-30)/w):pvZ;z=Math.max(.3,z||1);p.style.zoom=z;$id("pvZ").textContent=Math.round(z*100)+"%"}
-function pvZoom(d){if(pvMode==="fit"){pvZ=parseFloat($id("paper").style.zoom)||1;pvMode="manual"}pvZ=Math.max(.3,Math.min(1.6,pvZ+d*.1));pvApply()}
-function pvFit(){pvMode="fit";pvApply()}
-addEventListener("resize",pvApply);
-/* navigation */
-const NAVP=[["Home","Dashboard"],["Quotations","Manage Quotations"],["Catalogue","Product Catalogue"],["Customers","Customers"],["Employees","Employees"],["Reports","Reports / Export"],["Settings","Settings"]];
-$id("apNav").innerHTML=NAVP.map(([l,p])=>`<button data-p="${p}" onclick="showAppPage('${p}')">${l}</button>`).join("");
-const apNavSet=p=>document.querySelectorAll("#apNav button").forEach(b=>b.classList.toggle("on",b.dataset.p===p));
-function goEditor(){$id("navPage").style.display="none";$id("viewEditor").hidden=false;apNavSet("");setFormat(currentFormat);window.scrollTo(0,0);setTimeout(pvApply,30)}
-const _spn=showAppPage;showAppPage=function(p){if(p==="Create Quotation"){goEditor();return}$id("viewEditor").hidden=true;$id("drawer").hidden=true;_spn(p);apNavSet(p)};
-startCreate=goEditor;backToFormats=function(){showAppPage("Dashboard")};chooseLandingFormat=function(f){landingFormat=f};
-function newQuote(silent){const n=readSavedQuotes().length+1,st=(typeof getSettings==="function"?getSettings():{})||{};$id("quoteNo").value="QT-TBHS-EQP-"+String(n).padStart(6,"0");$id("quoteDate").value=dateISO(0);$id("expiryDate").value=dateISO(num(st.validity||15));["customerName","customerAddress","customerGST","contactPerson","customerMobile","customerEmail","orderBy","preparedBy"].forEach(i=>$id(i).value="");$id("globalDiscount").value=0;items=[];try{localStorage.removeItem("tbhs_draft")}catch(e){}$id("viewEditor").hidden=false;goEditor();renderQuote();if(!silent)toast("New quotation started")}
-function toggleDrawer(){const d=$id("drawer");d.hidden=!d.hidden}togglePanel=toggleDrawer;openPanel=function(){};panelTab=function(){};
-/* editing wiring */
-enableCellEditing=function(){};
-(function(){const T=document.querySelector(ED);
- T.addEventListener("input",e=>{const t=e.target,f=t.dataset&&t.dataset.f;if(!f)return;const it=itOf(t.closest("tr").dataset.id);if(!it)return;it[f]=t.type==="number"?(t.value===""?"":num(t.value)):t.value;liveUpdate()});
- T.addEventListener("change",e=>{if(e.target.dataset&&e.target.dataset.f==="section")renderQuote()});
- T.addEventListener("keydown",e=>{const t=e.target,f=t.dataset&&t.dataset.f;if(!f||!["Enter","ArrowDown","ArrowUp"].includes(e.key))return;const tr=t.closest("tr"),n=e.key==="ArrowUp"?tr.previousElementSibling:tr.nextElementSibling;if(!n&&e.key==="Enter"){e.preventDefault();addBlank();setTimeout(()=>{const l=T.querySelector("tbody tr:last-child [data-f='"+f+"']");l&&l.focus()},0);return}if(n){const x=n.querySelector("[data-f='"+f+"']");if(x){e.preventDefault();x.focus();x.select&&x.select()}}});
- T.addEventListener("click",e=>{const x=e.target.closest(".ed-x");if(x){delImg(x.closest("td").dataset.img);return}const im=e.target.closest("td.ed-img");if(im){pickImage(im.dataset.img);return}const th=e.target.closest("th[data-col]");if(th)pickCol(th.dataset.col,e)});
- const ic=e=>e.target.closest&&e.target.closest("td.ed-img");
- T.addEventListener("dragover",e=>{const td=ic(e);if(td){e.preventDefault();td.classList.add("dragover")}});T.addEventListener("dragleave",e=>{const td=ic(e);td&&td.classList.remove("dragover")});
- T.addEventListener("drop",e=>{const td=ic(e);if(!td)return;e.preventDefault();td.classList.remove("dragover");dropImages(td.dataset.img,e.dataTransfer.files)});
- document.addEventListener("keydown",e=>{if(e.key==="/"&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)&&!$id("viewEditor").hidden){e.preventDefault();$id("apSearch").focus()}});
- $id("paper").addEventListener("dblclick",e=>{if(e.target.closest("#itemsPreview"))return;const M=[[".paper-head","companyAddr"],["#billPreview","customerName"],["#partnerPreview","partnerName"],["#specPreview","specifications"],["#termsPreview","terms"]];for(const[s,id]of M){if(e.target.closest(s)){const el=$id(id);let d=el.closest("details");if(d)d.open=true;if(id==="companyAddr")$id("drawer").hidden=false;el.scrollIntoView({block:"center",behavior:"smooth"});el.focus();return}}});
- enableStudioEditing=function(){}})();
-const _ps=paintSel;paintSel=function(){_ps();document.querySelectorAll(ED+" .sel").forEach(e=>e.classList.remove("sel"));if(sel&&sel.t==="col")sel.keys.forEach(k=>document.querySelectorAll(ED+" [data-col='"+k+"']").forEach(e=>e.classList.add("sel")))};
-const _dc=drawChips;drawChips=function(){_dc();const el=$id("colChips");if(el)el.insertAdjacentHTML("afterbegin",`<button class="chip ${edMore?"on":""}" onclick="edMore=!edMore;renderQuote()" title="Type, Image, Make and Model columns">${edMore?"✓":"＋"} Type · Image · Make · Model</button>`)};
-/* drafts + guards */
-const saveDraft=()=>{try{localStorage.setItem("tbhs_draft",JSON.stringify(quoteData()));$id("saveState").textContent="Draft saved ✓"}catch(e){}};
-function loadDraft(){const q=rj("tbhs_draft");if(!q||!Array.isArray(q.items))return false;FIELD_IDS.forEach(i=>{const el=$id(i);if(el&&q.fields&&q.fields[i]!==undefined)el.value=q.fields[i]});items=q.items;if(q.globalDiscount!==undefined)$id("globalDiscount").value=q.globalDiscount;if(q.format)currentFormat=q.format;return true}
-const _rq11=renderQuote;renderQuote=function(){_rq11();if(!skipEd)renderEditor();updateSummary();$id("saveState").textContent="Unsaved changes…";clearTimeout(tmrD);tmrD=setTimeout(saveDraft,700);requestAnimationFrame(pvApply)};
-[["exportPDF"],["exportExcel"],["exportCSV"]].forEach(([n])=>{const f=window[n];window[n]=function(){if(!items.length){toast("Add at least one product before downloading");return}if(!val("customerName").trim())toast("Tip: customer name is empty");f()}});
-renderCatalogue=function(){};
-if(loadDraft()){$id("viewEditor").hidden=false;goEditor();renderQuote()}else newQuote(true);
 </script>
 </body>
 </html>
