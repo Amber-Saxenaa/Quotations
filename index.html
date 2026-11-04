@@ -1,0 +1,958 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TBHS | Quotation Studio — Test Version</title>
+<style>
+:root{
+  --maroon:#641d25;--red:#8f2733;--red2:#a83b45;--blush:#f6e9e8;--paper:#fffdfc;
+  --ink:#30282a;--muted:#786d6f;--line:#e7d9d8;--soft:#fbf5f4;--green:#2d725b;
+  --shadow:0 8px 26px rgba(60,20,25,.09);
+}
+*{box-sizing:border-box} body{margin:0;background:#f4eeee;color:var(--ink);font:14px/1.45 Inter,Segoe UI,Arial,sans-serif}
+button,input,select,textarea{font:inherit} button{cursor:pointer}
+.app{min-height:100vh;display:grid;grid-template-columns:220px minmax(0,1fr)}.app.editing{grid-template-columns:220px minmax(280px,360px) minmax(0,1fr)}
+.sidebar{background:linear-gradient(180deg,#51151c,#70232c);color:#fff;padding:24px 16px;display:flex;flex-direction:column;gap:24px;min-height:100vh;position:sticky;top:0;height:100vh}
+.brand{padding:8px 10px 18px;border-bottom:1px solid #ffffff30}.brand-mark{font-family:Georgia,serif;font-size:35px;letter-spacing:-3px}.brand small{display:block;font-size:10px;letter-spacing:2px;opacity:.85}
+.nav{display:grid;gap:6px}.nav button{border:0;background:transparent;color:#f8e9e9;text-align:left;padding:11px 12px;border-radius:9px}.nav button.active,.nav button:hover{background:#ffffff20}.nav span{display:inline-block;width:26px}
+.sidefoot{margin-top:auto;font-size:11px;opacity:.8}
+.editor{display:none;padding:22px 18px;background:#fbf7f6;border-right:1px solid var(--line);max-height:100vh;overflow:auto}
+h1,h2,h3,p{margin-top:0} h1{font-size:21px;margin-bottom:4px} h2{font-size:15px;margin-bottom:12px} h3{font-size:12px;color:var(--maroon);margin-bottom:8px}
+.sub{color:var(--muted);font-size:12px;margin-bottom:20px}
+.steps{display:flex;gap:8px;margin:18px 0}.step{flex:1;text-align:center;font-size:10px;color:var(--muted);border-bottom:2px solid var(--line);padding:7px 0}.step.active{color:var(--red);border-color:var(--red);font-weight:700}
+.panel{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:14px;box-shadow:0 2px 8px #521b2010}
+label{display:block;font-size:11px;font-weight:650;color:#6c5053;margin:9px 0 4px}
+input,select,textarea{width:100%;border:1px solid #e4d7d6;border-radius:7px;padding:8px 9px;background:#fff;color:var(--ink);outline:none}
+input:focus,select:focus,textarea:focus{border-color:#b15a62;box-shadow:0 0 0 2px #a83b4518}
+textarea{resize:vertical;min-height:55px}.two{display:grid;grid-template-columns:1fr 1fr;gap:9px}.three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px}
+.btn{border:1px solid var(--line);background:white;color:var(--maroon);padding:9px 12px;border-radius:8px;font-weight:650}.btn.primary{background:var(--red);color:white;border-color:var(--red)}.btn.dark{background:var(--maroon);color:white;border-color:var(--maroon)}.btn.small{padding:5px 8px;font-size:11px}.btn:hover{filter:brightness(.97)}.actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.catalogue-item{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid #f0e7e6}.catalogue-item:last-child{border-bottom:0}.catalogue-item b{font-size:12px}.catalogue-item small{display:block;color:var(--muted);font-size:10px}
+.product-search{margin-bottom:7px}.mini-note{font-size:10px;color:var(--muted);line-height:1.5}
+.workspace{display:none;padding:22px;min-width:0;overflow:auto}.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}.topbar p{margin:0;color:var(--muted);font-size:12px}.top-actions{display:flex;gap:7px;flex-wrap:wrap}
+.designs{display:flex;gap:8px;flex-wrap:wrap}.design{border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:#fff;min-width:120px;flex:1}.design.selected{border-color:var(--red);box-shadow:0 0 0 2px #a83b4517}.design strong{display:block;font-size:12px}.design small{color:var(--muted);font-size:10px}
+.preview-wrap{display:flex;justify-content:center;padding:18px 0 40px}.paper{width:min(100%,820px);min-height:1000px;background:var(--paper);box-shadow:var(--shadow);border:1px solid #e4d7d6;padding:35px 38px;position:relative}
+.paper-head{display:flex;align-items:center;justify-content:space-between;gap:18px;border-bottom:4px solid var(--maroon);padding-bottom:15px}.logo{display:flex;align-items:center;gap:12px}.logo-mark{font:32px Georgia,serif;color:var(--maroon);letter-spacing:-3px}.logo-text{font-size:16px;line-height:1.1;font-weight:800;letter-spacing:.4px}.logo-text small{font-size:8px;letter-spacing:1.5px;display:block;margin-top:5px;color:var(--muted)}
+.company-info{text-align:right;font-size:9px;color:#64585a;max-width:270px}.ribbon{background:var(--maroon);color:white;text-align:center;font-size:9px;padding:6px;margin-bottom:19px}
+.quote-heading{display:flex;justify-content:space-between;gap:15px;align-items:flex-start;margin:18px 0}.quote-heading h2{font: bold 30px Georgia,serif;color:var(--red);margin:0}.quote-meta{font-size:10px;background:var(--soft);border:1px solid var(--line);border-radius:7px;padding:10px;min-width:210px}.quote-meta div{display:flex;gap:8px;margin:2px 0}.quote-meta b{min-width:78px}
+.parties{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}.party{background:var(--soft);border:1px solid #efe3e2;border-radius:7px;padding:11px;font-size:10px;min-height:110px}.party h3{border-bottom:1px solid var(--line);padding-bottom:6px;margin-bottom:6px}.party p{margin:3px 0;white-space:pre-wrap}.spec{font-size:10px;background:#f7e9e8;padding:9px;border-radius:6px;margin-bottom:16px}.section-title{background:var(--maroon);color:#fff;padding:6px 10px;border-radius:6px 6px 0 0;font-size:10px;font-weight:800;letter-spacing:.4px;margin-top:13px}
+table{width:100%;border-collapse:collapse} .items-table{font-size:9px}.items-table th{background:#8b2933;color:#fff;font-size:8px;padding:7px 4px;text-align:left;white-space:nowrap}.items-table td{border:1px solid #eadfdd;padding:6px 4px;vertical-align:top}.items-table tbody tr:nth-child(even){background:#fcf7f6}.num{text-align:right;white-space:nowrap}.empty{text-align:center!important;padding:28px!important;color:#99888a}
+.section-total{width:48%;margin:0 0 12px auto;font-size:9px}.section-total td{padding:4px 7px;border:1px solid #eadfdd}.section-total tr:last-child{background:var(--maroon);color:white;font-weight:800}
+.final-totals{width:54%;margin:20px 0 20px auto;font-size:10px}.final-totals td{padding:6px 9px;border:1px solid var(--line)}.final-totals tr:last-child{background:var(--maroon);color:white;font-weight:800;font-size:12px}
+.terms{border-top:1px solid var(--line);padding-top:12px;font-size:9px;white-space:pre-wrap}.signature{display:flex;justify-content:space-between;margin-top:40px;font-size:9px}.signline{border-top:1px solid #a99698;padding-top:6px;width:170px;text-align:center}
+.paper-foot{position:absolute;bottom:15px;left:38px;right:38px;border-top:3px solid var(--maroon);padding-top:7px;display:flex;justify-content:space-between;font-size:8px;color:var(--muted)}
+.badge{background:#f4e4e4;color:var(--maroon);border-radius:99px;padding:4px 8px;font-size:10px;font-weight:700}.status{color:var(--green);font-size:11px}
+.toast{position:fixed;right:20px;bottom:20px;background:#30282a;color:white;padding:12px 16px;border-radius:9px;box-shadow:var(--shadow);display:none;z-index:5}
+body.format-classic .section-total{display:none}body.format-classic .section-title{background:#f0e3e2;color:var(--maroon)}
+body.format-premium .paper{border-top:7px solid var(--red)}body.format-premium .quote-heading h2{letter-spacing:2px}
+@media(max-width:1200px){.app{grid-template-columns:70px minmax(0,1fr)}.app.editing{grid-template-columns:70px minmax(270px,330px) minmax(0,1fr)}.sidebar{padding:18px 9px}.brand-mark{font-size:23px}.brand small,.nav .navtext,.sidefoot{display:none}.nav button{text-align:center;padding:12px 4px}.nav span{width:auto}}
+@media(max-width:850px){.app{display:block}.sidebar{background:linear-gradient(180deg,#51151c,#70232c);color:#fff;padding:24px 16px;display:flex;flex-direction:column;gap:24px;min-height:100vh;position:sticky;top:0;height:100vh}.editor{max-height:none;border-right:0}.workspace{padding:12px}.paper{padding:20px;min-height:950px}.paper-foot{left:20px;right:20px}.parties{grid-template-columns:1fr}.quote-heading{flex-direction:column}.quote-meta{width:100%}.company-info{font-size:8px}.items-table{font-size:8px}.items-table th,.items-table td{padding:4px 2px}.hide-mobile{display:none}}
+@media print{body{background:#fff}.sidebar,.editor,.topbar,.design-picker,.no-print{display:none!important}.app{display:block}.workspace{padding:0;overflow:visible}.preview-wrap{padding:0;display:block}.paper{width:100%;min-height:0;border:0;box-shadow:none;padding:12mm 10mm 18mm;margin:0;page-break-after:always}.paper:last-child{page-break-after:auto}.paper-foot{position:fixed;bottom:5mm;left:10mm;right:10mm}.section-title{break-after:avoid}.items-table tr{break-inside:avoid} @page{size:A4;margin:0}}
+
+.landing{grid-column:2;min-height:100vh;background:radial-gradient(circle at 80% 0%,#f4dddd 0,transparent 34%),#fbf7f6;padding:clamp(22px,5vw,64px)}
+.landing-inner{max-width:1200px;margin:auto}.landing-brand{display:flex;align-items:center;gap:14px;margin-bottom:46px}
+.landing-logo{font:42px Georgia,serif;color:var(--maroon);letter-spacing:-4px;border-right:1px solid var(--line);padding-right:15px}
+.landing-brand strong{display:block;font-size:17px;letter-spacing:.7px;color:var(--maroon)}.landing-brand small{display:block;font-size:10px;letter-spacing:1.7px;color:var(--muted);margin-top:4px}
+.landing-eyebrow{color:var(--red);font-size:11px;letter-spacing:2px;font-weight:800;text-transform:uppercase;margin-bottom:10px}
+.landing h1{font-size:clamp(30px,4vw,44px);margin-bottom:10px;color:#3c2528}.landing-intro{color:var(--muted);font-size:15px;max-width:620px;margin-bottom:30px}
+.format-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin:28px 0 24px}
+.format-card{border:1px solid var(--line);border-radius:15px;padding:17px;background:white;text-align:left;cursor:pointer;color:var(--ink);box-shadow:0 5px 18px #521b2009}
+.format-card.selected{border:2px solid var(--red);padding:16px;box-shadow:0 0 0 3px #a83b4513}
+.format-card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:13px}
+.format-letter{font-size:11px;color:var(--red);font-weight:800;letter-spacing:1px}.radio-dot{width:18px;height:18px;border:1.5px solid #bba7a8;border-radius:50%}
+.format-card.selected .radio-dot{border:6px solid var(--red)}
+.format-thumb{height:145px;background:linear-gradient(#fff,#fbf3f2);border:1px solid #efe1e0;border-radius:8px;padding:13px;margin-bottom:15px;overflow:hidden}
+.thumb-head{height:20px;border-bottom:4px solid var(--maroon);display:flex;justify-content:space-between;margin-bottom:10px}.thumb-head:before{content:"TBHS";font:12px Georgia,serif;color:var(--maroon)}.thumb-head:after{content:"QUOTATION";font-size:6px;color:var(--red);font-weight:800}
+.thumb-line{height:5px;background:#eadbda;margin:6px 0;border-radius:2px}.thumb-line.short{width:52%}.thumb-line.mid{width:75%}.thumb-table{margin-top:10px}.thumb-row{height:12px;border-bottom:1px solid #e9dedd;display:grid;grid-template-columns:1fr 3fr 1fr;gap:5px}.thumb-row:first-child{background:var(--maroon);height:14px}.thumb-row span{background:#eadbda;margin:3px 0}.thumb-row:first-child span{background:#f4dfe0}
+.format-card h2{font-size:17px;margin-bottom:6px;color:var(--maroon)}.format-card p{font-size:12px;color:var(--muted);min-height:38px;margin-bottom:13px}
+.feature-pills{display:flex;gap:6px;flex-wrap:wrap}.feature-pills span{font-size:10px;border-radius:99px;background:#f7eaea;color:#744047;padding:5px 8px}
+.landing-bottom{display:flex;justify-content:space-between;align-items:center;gap:20px;border-top:1px solid var(--line);padding-top:22px;margin-top:24px}
+.landing-note{font-size:12px;color:var(--muted);max-width:500px}.create-btn{background:var(--maroon);color:white;border:0;border-radius:9px;padding:14px 25px;font-weight:750;min-width:200px}
+.back-btn{margin-bottom:14px}
+@media(max-width:800px){.format-cards{grid-template-columns:1fr}.landing-bottom{align-items:stretch;flex-direction:column}.create-btn{width:100%}}
+@media(max-width:850px){.app{display:block}.sidebar{position:relative;min-height:0;height:auto;display:flex;padding:10px;gap:8px}.brand{display:none}.nav{display:flex;overflow:auto}.nav button{white-space:nowrap;padding:9px}.nav .navtext{display:inline}.nav span{width:auto}.sidefoot{display:none}.landing{padding:20px}.app.editing{display:block}.editor{max-height:none;border-right:0}.workspace{padding:12px}}
+
+
+.landing{grid-column:2;min-height:100vh;background:radial-gradient(circle at 80% 0%,#f4dddd 0,transparent 34%),#fbf7f6;padding:clamp(22px,5vw,64px)}
+.landing-inner{max-width:1200px;margin:auto}.landing-brand{display:flex;align-items:center;gap:14px;margin-bottom:46px}
+.landing-logo{font:42px Georgia,serif;color:var(--maroon);letter-spacing:-4px;border-right:1px solid var(--line);padding-right:15px}
+.landing-brand strong{display:block;font-size:17px;letter-spacing:.7px;color:var(--maroon)}.landing-brand small{display:block;font-size:10px;letter-spacing:1.7px;color:var(--muted);margin-top:4px}
+.landing-eyebrow{color:var(--red);font-size:11px;letter-spacing:2px;font-weight:800;text-transform:uppercase;margin-bottom:10px}
+.landing h1{font-size:clamp(30px,4vw,44px);margin-bottom:10px;color:#3c2528}.landing-intro{color:var(--muted);font-size:15px;max-width:620px;margin-bottom:30px}
+.format-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin:28px 0 24px}
+.format-card{border:1px solid var(--line);border-radius:15px;padding:17px;background:white;text-align:left;cursor:pointer;color:var(--ink);box-shadow:0 5px 18px #521b2009}
+.format-card.selected{border:2px solid var(--red);padding:16px;box-shadow:0 0 0 3px #a83b4513}
+.format-card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:13px}
+.format-letter{font-size:11px;color:var(--red);font-weight:800;letter-spacing:1px}.radio-dot{width:18px;height:18px;border:1.5px solid #bba7a8;border-radius:50%}.format-card.selected .radio-dot{border:6px solid var(--red)}
+.format-thumb{height:145px;background:linear-gradient(#fff,#fbf3f2);border:1px solid #efe1e0;border-radius:8px;padding:13px;margin-bottom:15px;overflow:hidden}
+.thumb-head{height:20px;border-bottom:4px solid var(--maroon);display:flex;justify-content:space-between;margin-bottom:10px}.thumb-head:before{content:"TBHS";font:12px Georgia,serif;color:var(--maroon)}.thumb-head:after{content:"QUOTATION";font-size:6px;color:var(--red);font-weight:800}
+.thumb-line{height:5px;background:#eadbda;margin:6px 0;border-radius:2px}.thumb-line.short{width:52%}.thumb-line.mid{width:75%}.thumb-table{margin-top:10px}.thumb-row{height:12px;border-bottom:1px solid #e9dedd;display:grid;grid-template-columns:1fr 3fr 1fr;gap:5px}.thumb-row:first-child{background:var(--maroon);height:14px}.thumb-row span{background:#eadbda;margin:3px 0}.thumb-row:first-child span{background:#f4dfe0}
+.format-card h2{font-size:17px;margin-bottom:6px;color:var(--maroon)}.format-card p{font-size:12px;color:var(--muted);min-height:38px;margin-bottom:13px}
+.feature-pills{display:flex;gap:6px;flex-wrap:wrap}.feature-pills span{font-size:10px;border-radius:99px;background:#f7eaea;color:#744047;padding:5px 8px}
+.landing-bottom{display:flex;justify-content:space-between;align-items:center;gap:20px;border-top:1px solid var(--line);padding-top:22px;margin-top:24px}
+.landing-note{font-size:12px;color:var(--muted);max-width:500px}.create-btn{background:var(--maroon);color:white;border:0;border-radius:9px;padding:14px 25px;font-weight:750;min-width:200px}
+.back-btn{margin-bottom:14px}
+.selected-preview{background:#fff;border:1px solid var(--line);border-radius:16px;padding:26px;display:grid;grid-template-columns:minmax(300px,380px) 1fr;gap:32px;align-items:center;margin:14px 0 28px;box-shadow:0 8px 28px #521b2010;min-height:350px}
+.selected-preview > div:last-child{padding:12px 10px}
+.selected-preview h2{font-size:26px;margin:8px 0 12px;color:var(--maroon)}
+.selected-preview p{font-size:15px;line-height:1.7;color:var(--muted);max-width:540px;margin-bottom:18px}
+.selected-preview .feature-pills span{font-size:12px;padding:7px 11px}
+.selected-preview .preview-paper{background:#fffdfc;border:1px solid #e5d8d7;box-shadow:0 6px 20px #521b2012;padding:22px;min-height:300px;width:100%;display:flex;flex-direction:column}
+.selected-preview .preview-top{height:38px;border-bottom:6px solid var(--maroon);font:22px Georgia,serif;color:var(--maroon);display:flex;justify-content:space-between;padding-bottom:8px}
+.selected-preview .preview-top:after{content:'QUOTATION';font:800 10px Arial;color:var(--red);align-self:center}
+.selected-preview .preview-block{height:28px;background:#f6e9e8;margin:13px 0;border-radius:3px}.selected-preview .preview-table-head{height:24px;background:var(--maroon);margin-top:14px}.selected-preview .preview-row{height:24px;border-bottom:1px solid #eadfdd}
+.editor-table-actions{white-space:nowrap;text-align:center}.cell-btn{border:0;background:#f4e5e5;color:var(--maroon);font-weight:800;border-radius:50%;width:19px;height:19px;line-height:18px;padding:0;margin:1px}.cell-btn:hover{background:var(--red);color:#fff}
+.items-table td[contenteditable="true"]{outline:2px solid #b85b64;background:#e8eef8;min-width:35px}
+@media(max-width:800px){.format-cards{grid-template-columns:1fr}.landing-bottom{align-items:stretch;flex-direction:column}.create-btn{width:100%}.selected-preview{grid-template-columns:1fr;padding:16px;gap:18px}.selected-preview .preview-paper{max-width:440px;min-height:250px}.selected-preview h2{font-size:22px}}
+@media(max-width:850px){.app{display:block}.sidebar{position:relative;min-height:0;height:auto;display:flex;padding:10px;gap:8px}.brand{display:none}.nav{display:flex;overflow:auto}.nav button{white-space:nowrap;padding:9px}.nav .navtext{display:inline}.nav span{width:auto}.sidefoot{display:none}.landing{padding:20px}.app.editing{display:block}.editor{max-height:none;border-right:0}.workspace{padding:12px}}
+
+
+/* Full-page quotation mode */
+.app.full-quote{display:block!important;min-height:100vh;background:#eee7e6}
+.app.full-quote .sidebar,.app.full-quote .editor{display:none!important}
+.app.full-quote .workspace{display:block!important;min-height:100vh;padding:18px clamp(12px,3vw,42px);overflow:visible}
+.app.full-quote .topbar{max-width:1200px;margin:0 auto 14px;position:sticky;top:0;z-index:4;background:#f4eeee;padding:10px 0}
+.app.full-quote .preview-wrap{padding:0 0 36px;justify-content:center}
+.app.full-quote .paper{width:min(100%,1100px);min-height:calc(100vh - 100px);padding:clamp(20px,3vw,42px);box-shadow:0 8px 32px #34171a20}
+.app.full-quote .paper [data-full-edit="true"]{cursor:text;outline-offset:2px}
+.app.full-quote .paper [data-full-edit="true"]:hover{outline:1px dashed #b76c72}
+.app.full-quote .paper [contenteditable="true"]{outline:2px solid #b85b64;background:#fff8d8;min-width:24px}
+.full-page-hint{display:none;font-size:11px;color:var(--muted);margin-top:4px}
+.app.full-quote .full-page-hint{display:block}
+@media(max-width:850px){.app.full-quote .workspace{padding:10px}.app.full-quote .topbar{position:static;align-items:flex-start;flex-direction:column}.app.full-quote .paper{padding:16px}.app.full-quote .parties{grid-template-columns:1fr}.app.full-quote .quote-heading{flex-direction:column}}
+@media print{.app.full-quote .topbar{display:none!important}.app.full-quote .workspace{padding:0;background:white}.app.full-quote .paper{width:100%;box-shadow:none;border:0;margin:0}.app.full-quote .paper [contenteditable="true"]{outline:none;background:transparent}}
+
+
+/* Detailed, full-page A4 design preview on the format-selection screen */
+.selected-preview{grid-template-columns:minmax(500px,1.25fr) minmax(230px,.75fr);align-items:start;gap:30px;padding:28px;min-height:0}
+.selected-preview .preview-paper{width:100%;max-width:700px;min-height:0;aspect-ratio:210/297;height:auto;justify-self:center;display:flex;flex-direction:column;position:relative;overflow:hidden;padding:clamp(15px,2vw,28px);font-size:clamp(5px,.65vw,9px);line-height:1.35;color:#34292a;background:#fff;box-shadow:0 8px 24px #521b2018;border:1px solid #e4d7d6}
+.mock-head{display:flex;justify-content:space-between;gap:12px;border-bottom:4px solid #641d25;padding-bottom:10px;align-items:center}.mock-brand{display:flex;align-items:center;gap:8px;min-width:0}.mock-logo{font:clamp(20px,2.4vw,34px) Georgia,serif;letter-spacing:-2px;color:#641d25;border-right:1px solid #e7d9d8;padding-right:8px}.mock-brand b{font-size:clamp(7px,.75vw,11px);display:block;color:#641d25;white-space:nowrap}.mock-brand small{display:block;font-size:clamp(4px,.42vw,6px);letter-spacing:.6px;color:#786d6f;margin-top:3px}.mock-company{text-align:right;color:#786d6f;font-size:clamp(5px,.52vw,7px)}
+.mock-ribbon{background:#641d25;color:white;text-align:center;font-size:clamp(6px,.6vw,8px);font-weight:800;letter-spacing:1.5px;padding:5px;margin:9px 0 12px}.mock-quotehead{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;margin-bottom:12px}.mock-quotehead h3{font: bold clamp(14px,1.6vw,22px) Georgia,serif;color:#8f2733;margin:0}.mock-quotehead>div{font-size:clamp(5px,.56vw,7px);background:#fbf5f4;border:1px solid #e7d9d8;padding:6px;line-height:1.7}.mock-quotehead b{display:inline-block;min-width:48px}.mock-parties{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}.mock-parties>div{background:#fbf5f4;border:1px solid #efe3e2;border-radius:3px;padding:7px;display:flex;flex-direction:column;gap:3px;min-height:70px}.mock-parties>div>b{font-size:clamp(5px,.52vw,7px);color:#641d25;border-bottom:1px solid #e7d9d8;padding-bottom:4px;margin-bottom:2px}.mock-parties strong{font-size:clamp(6px,.65vw,9px)}.mock-parties span{color:#786d6f}.mock-intro{margin:0 0 8px;color:#786d6f}.mock-section-title{background:#641d25;color:white;font-size:clamp(5px,.58vw,8px);font-weight:800;letter-spacing:.4px;padding:5px 7px;margin-top:4px}.mock-items{font-size:clamp(5px,.55vw,7.5px);border-collapse:collapse;width:100%;table-layout:auto}.mock-items th{background:#8b2933;color:#fff;text-align:left;padding:5px 3px;font-size:clamp(4px,.48vw,6.5px);white-space:nowrap}.mock-items td{border:1px solid #eadfdd;padding:5px 3px;vertical-align:top}.mock-items td:first-child{white-space:nowrap}.mock-items td:nth-child(3){white-space:nowrap}.mock-items small{display:block;color:#786d6f;margin-top:2px}.mock-section-total{width:55%;margin:0 0 8px auto;display:grid;grid-template-columns:1fr auto;font-size:clamp(5px,.52vw,7px)}.mock-section-total>*{padding:3px 5px;border:1px solid #eadfdd}.mock-section-total strong{background:#f6e9e8;color:#641d25}.mock-second-section{margin-top:3px}.mock-total{width:57%;margin:10px 0 10px auto;font-size:clamp(6px,.6vw,8px)}.mock-total>div{display:flex;justify-content:space-between;border:1px solid #e7d9d8;padding:5px 7px}.mock-total .grand{background:#641d25;color:white;font-weight:800;font-size:clamp(7px,.7vw,10px)}.mock-terms{border-top:1px solid #e7d9d8;padding-top:7px;font-size:clamp(5px,.53vw,7px)}.mock-terms>b{color:#641d25;letter-spacing:.4px}.mock-terms ol{padding-left:14px;margin:4px 0}.mock-terms li{margin:2px 0}.mock-signatures{display:flex;justify-content:space-between;gap:12px;margin-top:auto;padding-top:18px;font-size:clamp(5px,.53vw,7px)}.mock-signatures span{border-top:1px solid #a99698;padding-top:4px;width:42%;text-align:center}.mock-footer{display:flex;justify-content:space-between;border-top:3px solid #641d25;padding-top:5px;margin-top:10px;color:#786d6f;font-size:clamp(4px,.45vw,6px)}
+.selected-preview-info{padding:20px 12px;position:sticky;top:24px}.selected-preview-info h2{font-size:clamp(22px,2vw,30px)}.selected-preview-info p{font-size:14px;line-height:1.65}.mock-preview-note{margin-top:24px;padding:12px;border-radius:8px;background:#fbf5f4;border:1px solid #e7d9d8;font-size:12px!important}
+#landingQuotePaper.format-classic .mock-section-title,#landingQuotePaper.format-classic .mock-section-total{display:none}#landingQuotePaper.format-classic .mock-items th{background:#641d25}#landingQuotePaper.format-premium{border-top:7px solid #8f2733}#landingQuotePaper.format-premium .mock-ribbon{letter-spacing:3px}#landingQuotePaper.format-premium .mock-parties>div{background:#fff}
+@media(max-width:1050px){.selected-preview{grid-template-columns:minmax(0,1fr);}.selected-preview .preview-paper{max-width:620px;width:100%;font-size:8px}.selected-preview-info{position:static;padding:8px 4px}.mock-brand b{font-size:10px}.mock-brand small{font-size:5px}.mock-company{font-size:6px}.mock-quotehead h3{font-size:20px}.mock-quotehead>div{font-size:7px}.mock-parties>div>b{font-size:7px}.mock-parties strong{font-size:9px}.mock-items{font-size:7px}.mock-items th{font-size:6px}.mock-section-title{font-size:7px}.mock-total{font-size:8px}.mock-total .grand{font-size:10px}}
+@media(max-width:600px){.selected-preview{padding:12px;gap:14px}.selected-preview .preview-paper{padding:12px;max-width:100%}.mock-brand b{white-space:normal}.mock-parties>div{min-height:55px}.mock-items td,.mock-items th{padding:3px 2px}}
+
+
+/* Improved create quotation heading and navigation destination pages */
+.landing-title-row{display:flex;align-items:center;justify-content:space-between;gap:24px;margin:0 0 10px}
+.landing-title-row h1{margin:0}
+.heading-create-btn{flex:0 0 auto;min-width:190px;white-space:nowrap}
+.landing-intro{max-width:720px}
+.landing-bottom{margin-top:20px}
+.nav-page{grid-column:2;min-width:0;min-height:100vh;padding:clamp(22px,4vw,48px);background:radial-gradient(circle at 90% 0%,#f4dddd 0,transparent 30%),#fbf7f6}
+.nav-page-head{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:28px}
+.nav-page-head h1{font-size:34px;color:#3c2528;margin:0 0 8px}
+.nav-page-head p{color:var(--muted);font-size:14px;margin:0}
+.nav-page .btn.primary{background:var(--maroon);color:#fff;border-color:var(--maroon)}
+.page-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-bottom:22px}
+.page-card,.page-panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:0 5px 18px #521b2008;min-width:0}
+.page-card .metric{font-size:30px;color:var(--maroon);font-weight:800;margin:8px 0}
+.page-card .muted,.page-panel .muted{font-size:12px;color:var(--muted)}
+.page-panel{margin-bottom:18px}
+.page-panel h2{font-size:16px;color:var(--maroon);margin-bottom:14px}
+.page-toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.page-toolbar input,.page-toolbar select,.page-form input,.page-form select,.page-form textarea{border:1px solid var(--line);border-radius:8px;padding:10px;background:#fff;color:var(--ink);font:inherit}
+.page-toolbar input{min-width:220px;flex:1}
+.page-table-wrap{overflow:auto}
+.page-table{width:100%;border-collapse:collapse;font-size:12px;min-width:620px}
+.page-table th{background:#f7eaea;color:var(--maroon);text-align:left;padding:11px 10px}
+.page-table td{padding:11px 10px;border-bottom:1px solid #f0e4e3;vertical-align:top}
+.page-table button,.mini-action{border:1px solid var(--line);background:#fff;color:var(--maroon);padding:6px 9px;border-radius:7px;cursor:pointer;font-weight:700}
+.page-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.page-form label{display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:700;color:var(--maroon)}
+.page-form .wide{grid-column:1/-1}
+.page-list{display:grid;gap:10px}
+.page-list-row{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid #f0e4e3}
+.page-list-row:last-child{border-bottom:0}
+.page-list-row strong{display:block;font-size:13px}.page-list-row small{color:var(--muted);font-size:11px}
+.nav .active{background:#87434a}
+@media(max-width:1000px){.page-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.landing-title-row{align-items:flex-start;flex-direction:column}.heading-create-btn{width:auto}}
+@media(max-width:650px){.page-grid{grid-template-columns:1fr}.nav-page-head{align-items:flex-start;flex-direction:column}.nav-page-head h1{font-size:28px}.page-form{grid-template-columns:1fr}.page-form .wide{grid-column:auto}}
+
+
+@media(min-width:851px){.app{grid-template-columns:176px minmax(0,1fr);align-items:stretch}.app.editing{grid-template-columns:176px minmax(280px,360px) minmax(0,1fr)}.sidebar{grid-column:1;grid-row:1 / span 4;position:sticky;top:0;height:100vh;align-self:start}.landing,.nav-page{grid-column:2;grid-row:1}.editor{grid-column:2;grid-row:1}.workspace{grid-column:3;grid-row:1}.app.full-quote{display:block!important}.app.full-quote .sidebar{display:none!important}}
+
+</style>
+<style>
+.items-table{table-layout:fixed}.items-table th{white-space:normal;text-align:center}.items-table td{word-break:break-word}.items-table .icol{background:#e8eef8}.items-table th.icol{background:#5b7399}
+#colDlg{border:1px solid var(--line);border-radius:14px;width:min(1000px,95%);padding:18px 20px}#colDlg::backdrop{background:#0006}
+.crow{display:grid;grid-template-columns:1.2fr .7fr 1.6fr 60px auto auto auto;gap:6px;align-items:center;padding:8px 0;border-bottom:1px solid #f0e4e3}.crow small{grid-column:1/-1;color:var(--muted);font-size:10px}.crow label{font-size:11px;margin:0;display:flex;gap:4px;align-items:center}.crow label input{width:auto}.crow button{padding:3px 8px;border:1px solid var(--line);background:#fff;border-radius:6px}
+</style>
+<style>
+.app.studio{display:block!important;background:#e9e2e1;min-height:100vh}.app.studio .sidebar{display:none!important}.app.studio .workspace{display:block!important;padding:0;overflow:visible}
+.app.studio .topbar{position:sticky;top:0;z-index:20;margin:0;padding:10px 18px;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 2px 10px #34171a14;flex-wrap:wrap;align-items:center}
+.studio-left{display:flex;gap:12px;align-items:center;min-width:0}.studio-left h1{font-size:16px;margin:0}.studio-left p{font-size:11px}
+.fmt-switch{display:flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}.fmt-switch button{border:0;background:#fff;padding:7px 12px;font-size:12px;font-weight:600;color:var(--muted)}.fmt-switch button.on{background:var(--maroon);color:#fff}
+.dl-label{font-size:11px;color:var(--muted);align-self:center;margin-left:6px}
+.app.studio .editor{display:block!important;position:fixed;right:0;top:var(--tb,64px);bottom:0;width:390px;max-width:100%;max-height:none;z-index:15;border-left:1px solid var(--line);border-right:0;overflow:auto;box-shadow:-6px 0 24px #34171a14;padding:0 14px 24px}
+.app.studio.panel-closed .editor{display:none!important}
+.app.studio .editor>.back-btn,.app.studio .editor>h1,.app.studio .editor>.sub,.app.studio .editor>.steps{display:none}
+.ptabs{position:sticky;top:0;z-index:2;display:flex;gap:4px;background:#fbf7f6;padding:12px 0 10px;margin-bottom:6px}.ptabs button{flex:1;border:1px solid var(--line);background:#fff;border-radius:8px;padding:8px 4px;font-size:12px;font-weight:700;color:var(--muted)}.ptabs button.on{background:var(--maroon);border-color:var(--maroon);color:#fff}
+.chk-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 10px;margin-top:4px}.chk-grid label{display:flex;gap:6px;align-items:center;font-size:12px;margin:0}.chk-grid input{width:auto}#layAccent{height:34px;padding:2px}
+.app.studio .preview-wrap{padding:22px 24px 60px;justify-content:center}.app.studio:not(.panel-closed) .preview-wrap{padding-right:414px}
+.app.studio .paper{width:min(100%,1180px);min-height:calc(100vh - 120px);padding:clamp(20px,3vw,42px);box-shadow:0 8px 32px #34171a20}
+@media(max-width:1100px){.app.studio:not(.panel-closed) .preview-wrap{padding-right:24px}}
+@media print{.app.studio .topbar,.app.studio .editor{display:none!important}.app.studio .preview-wrap{padding:0!important}.app.studio .paper{width:100%!important;min-height:0;box-shadow:none}}
+.paper.hide-head .paper-head{display:none!important}.paper.hide-ribbon .ribbon{display:none!important}.paper.hide-parties .parties{display:none!important}.paper.hide-spec .spec{display:none!important}.paper.hide-terms .terms{display:none!important}.paper.hide-sign .signature{display:none!important}.paper.hide-foot .paper-foot{display:none!important}
+</style>
+<style>
+.tbl-scroll{overflow-x:auto;margin-bottom:6px}.items-table td.img-cell{text-align:center;position:relative;padding:2px}.img-cell img{max-width:100%;max-height:46px;display:block;margin:auto}
+.img-add{display:inline-block;border:1px dashed #b76c72;border-radius:6px;color:var(--red);font-size:10px;padding:6px 4px;cursor:pointer}.img-x{position:absolute;top:0;right:0;background:#8f2733;color:#fff;border-radius:50%;width:15px;height:15px;line-height:14px;font-size:11px;cursor:pointer;display:none}.img-cell:hover .img-x{display:block}
+.app.studio .paper.land{width:min(100%,1700px)}.tbl-scroll::-webkit-scrollbar{height:9px}.tbl-scroll::-webkit-scrollbar-thumb{background:#c9a6a9;border-radius:6px}
+@media print{.tbl-scroll{overflow:visible}.items-table{min-width:0!important}}
+</style>
+<style>
+.quote-heading{justify-content:flex-end;margin:10px 0}
+.chipbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:4px 0 10px;font-size:12px}.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:4px 11px;font-size:12px;color:var(--muted)}.chip.on{background:#e8eef8;border-color:#a9b9d9;color:#2c4470}.chip.add{background:var(--maroon);color:#fff;border-color:var(--maroon);font-weight:700}
+.app.studio .items-table td{padding:4px 5px}.app.studio .items-table tbody tr:hover td{background:#fff8f6}.app.studio .items-table td[data-field]:hover{box-shadow:inset 0 -2px 0 #e0b9bd;cursor:text}.app.studio .items-table td.icol,.app.studio .items-table tbody tr:hover td.icol{background:#e8eef8}
+</style>
+<style>
+.logo-img{height:56px;width:auto;display:block}.foot-logo{height:15px}.foot-brand{display:flex;align-items:center;gap:6px}
+.quote-heading{justify-content:flex-start}.quote-meta{background:none;border:0;padding:0;min-width:0;font-size:11px}.quote-meta div{margin:3px 0}.quote-meta b{min-width:92px}
+.party:nth-child(2){text-align:right}
+</style>
+<style>
+.kv{display:grid;grid-template-columns:auto 10px 1fr;gap:0 5px;margin:3px 0;text-align:left}.kv b{min-width:84px}.party:nth-child(2) .kv{text-align:right}
+.paper .logo-text{font-size:calc(16px*var(--sz-company,1))}.paper .logo-img:not(.foot-logo){height:calc(56px*var(--sz-company,1))}
+.paper .party h3,.paper .spec>b,.paper .terms>b,.paper .section-title{font-size:calc(11px*var(--sz-head,1))}
+.paper .party,.paper .quote-meta{font-size:calc(10px*var(--sz-text,1))}.paper .spec,.paper .terms{font-size:calc(10px*var(--sz-notes,1))}.paper .final-totals{font-size:calc(11px*var(--sz-totals,1))}
+.items-table th{font-size:var(--th,inherit)}
+.szrow{display:grid;grid-template-columns:1fr 110px 38px;gap:6px;align-items:center;font-size:11px;margin:5px 0}.szrow input{width:100%;padding:0}.szrow output{font-size:11px;color:var(--muted);text-align:right}.szm{background:#eef2f8;border-radius:8px;padding:6px 8px;font-weight:700}
+.fmtbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:#eef2f8;border:1px solid #c9d3ea;border-radius:10px;padding:7px 10px;margin:0 0 10px;font-size:12px;position:sticky;top:calc(var(--tb,64px) + 4px);z-index:5}.fmtbar label{display:flex;gap:5px;align-items:center;margin:0}.fmtbar button,.fmtbar select{border:1px solid #b6c3e0;background:#fff;border-radius:6px;padding:3px 8px;font-size:12px}.fmtbar input[type=color]{width:30px;height:24px;padding:0;border:1px solid #b6c3e0}
+.items-table .sel{outline:2px solid #5b7399;outline-offset:-2px}.items-table td.dragover{outline:2px dashed #5b7399;background:#eaf0fb}.items-table th[data-col]{cursor:pointer}
+@media print{.items-table .sel{outline:none!important}}
+</style>
+<style>
+.quote-heading{display:none}.party:nth-child(2),.party:nth-child(2) .kv{text-align:left}.kv b{min-width:100px}.kv span:last-child{min-height:1em}
+.paper .ribbon{font-size:calc(10px*var(--sz-all,1))}.paper .company-info,.paper .paper-foot,.paper .signature{font-size:calc(11px*var(--sz-all,1))}
+.paper.land .paper-head{flex-direction:column;align-items:center;text-align:center;gap:6px}.paper.land .paper-head .logo{justify-content:center}.paper.land .company-info{text-align:center}
+.defbox{display:flex;flex-direction:column;gap:6px;border:1px solid #c9d3ea;background:#f3f6fc;border-radius:10px;padding:10px;margin-top:12px}.defbox small{color:var(--muted);font-size:11px;line-height:1.4}
+.items-table th{user-select:none}
+.mock-head{justify-content:center!important}.mock-company{display:none}.mock-logo-img{height:clamp(28px,3.6vw,50px);width:auto}.mock-parties>div span{display:block}.mock-parties i{font-style:normal;font-weight:700}
+</style>
+<style>
+.paper .paper-head{flex-direction:column;align-items:center;text-align:center;gap:8px;border-bottom:0;padding-bottom:12px}.paper .paper-head .logo{justify-content:center;gap:16px}
+.paper .logo-text{font-size:calc(36px*var(--sz-company,1));line-height:1.05;white-space:nowrap;letter-spacing:1px;color:var(--maroon)}.paper .logo-img:not(.foot-logo){height:calc(66px*var(--sz-company,1))}
+.head-contact{font-size:calc(11.5px*var(--sz-all,1));color:#5b4e50;letter-spacing:.3px}.head-hint{color:#a99a9c;font-size:10px;font-style:italic}
+.paper .ribbon{letter-spacing:2.5px;font-weight:700;margin-bottom:16px}
+</style>
+<style>
+@media print{.parties{display:grid!important;grid-template-columns:1fr 1fr!important;gap:10px!important}.party{min-height:0!important;break-inside:avoid}.paper{padding:12mm 10mm 18mm!important;min-height:0!important}.paper-foot{left:10mm!important;right:10mm!important}}
+@media(min-width:560px){.app.studio .parties{grid-template-columns:1fr 1fr}}
+.foot-brand{white-space:nowrap}
+</style>
+<style>
+/* ===== v11: redesigned shell — one screen, items editor + live preview ===== */
+[hidden]{display:none!important}
+#appRoot{display:block!important;min-height:100vh;background:#f6f2f1;color:#2a2224}
+.ap-top{position:sticky;top:0;z-index:40;height:56px;display:flex;align-items:center;gap:22px;padding:0 22px;background:#fff;border-bottom:1px solid #eadcdb}
+.ap-brand{display:flex;align-items:center;gap:10px;cursor:pointer}.ap-logo{height:36px!important;width:auto}.ap-brand b{display:block;font-size:15px;color:var(--maroon,#641d25);line-height:1.1}.ap-brand small{font-size:10px;color:#8a7b7d;letter-spacing:.6px}
+.ap-nav{display:flex;gap:2px;flex:1;overflow-x:auto}.ap-nav button{border:0;background:none;padding:8px 12px;border-radius:8px;font-size:13px;font-weight:600;color:#6d5f61;cursor:pointer;white-space:nowrap}.ap-nav button:hover{background:#f6eceb}.ap-nav button.on{background:#f3e3e2;color:var(--maroon,#641d25)}
+.ap-new{border:0;background:var(--maroon,#641d25);color:#fff;font-weight:700;padding:9px 16px;border-radius:9px;cursor:pointer;font-size:13px}.ap-new:hover{filter:brightness(1.12)}
+.nav-page{max-width:1240px;margin:0 auto;padding:26px 22px!important;grid-column:auto!important}
+.ap-edit{display:flex;flex-direction:column;height:calc(100vh - 56px)}
+.ap-bar{flex:none;display:flex;align-items:center;gap:12px;padding:9px 22px;background:#fff;border-bottom:1px solid #eadcdb;flex-wrap:wrap}
+.ap-title{display:flex;align-items:baseline;gap:10px}.ap-title h1{font-size:15px;margin:0;color:#2a2224}.ap-state{font-size:11px;color:#8a7b7d}
+.ap-spacer{flex:1}
+.fmt-switch{display:flex;border:1px solid #dcc9c8;border-radius:9px;overflow:hidden}.fmt-switch button{border:0;background:#fff;padding:7px 12px;font-size:12px;font-weight:600;color:#7d6f71;cursor:pointer}.fmt-switch button.on{background:var(--maroon,#641d25);color:#fff}
+.ap-btn{border:1px solid #dcc9c8;background:#fff;color:#4a3b3d;padding:7px 12px;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer}.ap-btn:hover{background:#faf3f2}.ap-btn.primary{background:var(--maroon,#641d25);border-color:var(--maroon,#641d25);color:#fff}.ap-btn.primary:hover{filter:brightness(1.12)}
+.ap-dl{display:flex;align-items:center;gap:6px;padding-left:12px;border-left:1px solid #eadcdb}.ap-dl span{font-size:11px;color:#8a7b7d}
+.ap-split{flex:1;min-height:0;display:grid;grid-template-columns:minmax(540px,1.12fr) minmax(380px,.88fr);gap:16px;padding:16px 22px 0}
+.ap-left,.ap-right{min-height:0;overflow:auto}.ap-left{display:flex;flex-direction:column;gap:14px;padding-bottom:40px}
+.ap-card{background:#fff;border:1px solid #eadcdb;border-radius:14px;padding:16px 18px}
+.ap-card h2,.ap-card>summary{font-size:12.5px;letter-spacing:.7px;text-transform:uppercase;color:var(--maroon,#641d25);margin:0 0 6px;font-weight:800}
+details.ap-card>summary{cursor:pointer;margin:0}details.ap-card[open]>summary{margin-bottom:8px}
+.ap-row2{display:grid;grid-template-columns:1.25fr 1fr;gap:14px}
+.ap-card label{display:block;font-size:11.5px;font-weight:600;color:#6d5f61;margin:9px 0 3px}
+.ap-card input:not([type=checkbox]):not([type=color]):not([type=range]),.ap-card textarea,.ap-card select{width:100%;box-sizing:border-box;border:1px solid #e0d2d1;border-radius:8px;padding:7px 9px;font-size:13px;background:#fff;font-family:inherit}
+.ap-card input:focus,.ap-card textarea:focus,.ap-card select:focus{outline:2px solid #ecd2d5;border-color:var(--maroon,#641d25)}
+.ap-card textarea{min-height:64px;resize:vertical}.ap-card .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ap-ihead{display:flex;align-items:center;justify-content:space-between;gap:10px}.ap-count{background:#f3e3e2;color:var(--maroon,#641d25);border-radius:999px;padding:1px 9px;font-size:11px;margin-left:6px}
+.ap-tools{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;margin-top:6px}
+.ap-search{position:relative;flex:1 1 280px}.ap-search input{font-size:13.5px!important;padding:10px 12px!important;border-color:#d9bcbf!important}
+.ap-results{position:absolute;left:0;right:0;top:calc(100% + 4px);background:#fff;border:1px solid #dcc9c8;border-radius:10px;box-shadow:0 12px 28px #34171a26;z-index:20;max-height:320px;overflow:auto}
+.ap-res{display:grid;grid-template-columns:1fr auto;gap:0 10px;padding:9px 12px;cursor:pointer;border-bottom:1px solid #f4eceb}.ap-res:hover{background:#fbf3f2}.ap-res small{grid-column:1;color:#8a7b7d;font-size:11px}.ap-res span{grid-row:1/3;grid-column:2;align-self:center;font-weight:700;color:var(--maroon,#641d25)}.ap-res.empty{color:#8a7b7d;font-size:12px;display:block}
+.ap-sec{flex:0 1 190px}.ap-sec label{margin-top:0}
+.ap-edit .chipbar{margin:10px 0 4px}.ap-edit .fmtbar{position:static;margin:8px 0 0}
+.ed-wrap{overflow:auto;max-height:44vh;border:1px solid #eadcdb;border-radius:10px;margin-top:8px}
+#itemsEditor{border-collapse:separate;border-spacing:0;width:100%;font-size:12.5px}
+#itemsEditor th{position:sticky;top:0;z-index:2;background:#f8efee;color:#6d4a4e;font-size:11px;font-weight:700;text-align:left;padding:8px 6px;border-bottom:1px solid #eadcdb;white-space:nowrap;cursor:pointer;user-select:none}
+#itemsEditor td{padding:2px 3px;border-bottom:1px solid #f4eceb;vertical-align:middle}
+#itemsEditor td input{width:100%;box-sizing:border-box;border:1px solid transparent;background:transparent;padding:6px 6px;border-radius:6px;font-size:12.5px;font-family:inherit;min-width:48px}
+#itemsEditor td input:hover{border-color:#e6d6d5;background:#fff}#itemsEditor td input:focus{border-color:var(--maroon,#641d25);background:#fff;outline:none;box-shadow:0 0 0 3px #f1dcde}
+#itemsEditor td input[type=number]{text-align:right}
+#itemsEditor .ed-n{width:28px;color:#a69798;text-align:center;font-size:11px}#itemsEditor .ed-calc{text-align:right;padding:0 8px;white-space:nowrap;font-variant-numeric:tabular-nums;color:#4a3b3d;background:#fcf9f8}
+#itemsEditor .ed-img{width:54px;text-align:center;position:relative;cursor:pointer}#itemsEditor .ed-img img{max-width:44px;max-height:34px;display:block;margin:auto}#itemsEditor .ed-img>span{color:#b49a9d;font-size:16px}#itemsEditor .ed-x{position:absolute;top:0;right:0;font-size:10px;background:#8f2733;color:#fff;border-radius:50%;width:14px;height:14px;line-height:14px;display:none}#itemsEditor .ed-img:hover .ed-x{display:block}
+#itemsEditor .ed-img.dragover{outline:2px dashed #5b7399;background:#eaf0fb}
+#itemsEditor .ed-a{white-space:nowrap;width:56px}#itemsEditor .ed-a button{border:0;background:none;cursor:pointer;opacity:.45;font-size:13px}#itemsEditor tr:hover .ed-a button{opacity:1}
+#itemsEditor .icol,#itemsEditor td.icol input{background:#eef2fa}#itemsEditor th.icol{background:#dfe6f3;color:#2c4470}
+#itemsEditor th.sel{outline:2px solid #5b7399;outline-offset:-2px}#itemsEditor td.sel{background:#e4ecf8}
+.ap-empty{padding:26px;text-align:center;color:#8a7b7d;font-size:13px}
+.ap-sum{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:flex-end;margin-top:12px}.ap-sumin{display:flex;gap:10px}.ap-sumin label{margin:0}.ap-sumin input{width:110px!important}
+.ap-sumnum{display:flex;gap:18px;align-items:flex-end}.ap-sumnum div{display:flex;flex-direction:column;align-items:flex-end}.ap-sumnum span{font-size:10.5px;color:#8a7b7d;text-transform:uppercase;letter-spacing:.5px}.ap-sumnum b{font-size:14px;font-variant-numeric:tabular-nums}.ap-sumnum .grand b{font-size:20px;color:var(--maroon,#641d25)}
+.ap-right{background:#ece6e5;border-radius:14px;display:flex;flex-direction:column;overflow:hidden}
+.ap-pvbar{flex:none;display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#fff;border-bottom:1px solid #eadcdb;font-size:12px;font-weight:700;color:#6d5f61}.ap-pvbar div{display:flex;gap:4px;align-items:center}.ap-pvbar button{border:1px solid #dcc9c8;background:#fff;border-radius:6px;padding:3px 9px;cursor:pointer}.ap-pvbar #pvZ{min-width:44px;text-align:center;font-weight:600}
+.ap-pvscroll{flex:1;min-height:0;overflow:auto;padding:14px}
+.ap-edit .paper{width:794px;max-width:none;margin:0 auto;box-shadow:0 8px 30px #34171a26}.ap-edit .paper.land{width:1123px}
+.ap-drawer{position:fixed;top:56px;right:0;bottom:0;width:392px;max-width:100%;background:#fff;border-left:1px solid #eadcdb;box-shadow:-10px 0 30px #34171a1f;z-index:35;overflow:auto;padding:0 16px 30px}
+.ap-dhead{position:sticky;top:0;background:#fff;display:flex;justify-content:space-between;align-items:center;padding:14px 0 10px;font-size:14px;z-index:2}.ap-dhead button{border:0;background:none;font-size:18px;cursor:pointer}
+.ap-drawer .panel{border:1px solid #eadcdb;border-radius:12px;padding:14px;margin-bottom:12px;background:#fff}
+.ap-drawer .panel h3{font-size:12px;letter-spacing:.7px;color:var(--maroon,#641d25);margin:0 0 6px}
+@media(max-width:1100px){.ap-edit{height:auto}.ap-split{grid-template-columns:1fr}.ap-left,.ap-right{overflow:visible}.ap-row2{grid-template-columns:1fr}.ap-dl{border-left:0;padding-left:0}}
+@media print{.ap-top,.ap-bar,.ap-left,.ap-pvbar,.ap-drawer,.nav-page{display:none!important}.ap-edit,.ap-split,.ap-right,.ap-pvscroll{display:block!important;height:auto!important;overflow:visible!important;padding:0!important;background:none!important}.ap-edit .paper,.ap-edit .paper.land{zoom:1!important;width:100%!important;box-shadow:none!important}}
+</style>
+</head>
+<body>
+<div class="app" id="appRoot">
+<div id="legacy" hidden><aside class="sidebar">
+    <div class="brand"><div class="brand-mark">TBHS</div><small>THE BIG HOTEL STORE</small></div>
+    <nav class="nav">
+      <button onclick="showAppPage('Dashboard')"><span>⌂</span><span class="navtext">Dashboard</span></button>
+      <button class="active" onclick="backToFormats()"><span>▤</span><span class="navtext">Create Quotation</span></button>
+      <button onclick="showAppPage('Manage Quotations')"><span>◷</span><span class="navtext">Manage Quotations</span></button>
+      <button onclick="showAppPage('Product Catalogue')"><span>▦</span><span class="navtext">Product Catalogue</span></button>
+      <button onclick="showAppPage('Customers')"><span>♙</span><span class="navtext">Customers</span></button>
+      <button onclick="showAppPage('Employees')"><span>♧</span><span class="navtext">Employees</span></button>
+      <button onclick="showAppPage('Reports / Export')"><span>▤</span><span class="navtext">Reports / Export</span></button>
+      <button onclick="showAppPage('Settings')"><span>⚙</span><span class="navtext">Settings</span></button>
+    </nav>
+    <div class="sidefoot">Your Partner in Hospitality Excellence</div>
+  </aside><section class="landing" id="landingPage">
+ <div class="landing-inner">
+  <div class="landing-brand"><div class="landing-logo">TBHS</div><div><strong>THE BIG HOTEL STORE</strong><small>HOTELWARE · KITCHEN EQUIPMENT · HOSPITALITY SOLUTIONS</small></div></div>
+  <div class="landing-eyebrow">Quotation Studio</div><div class="landing-title-row"><h1>Create a new quotation</h1><button class="create-btn heading-create-btn" onclick="startCreate()">Create Quotation&nbsp; →</button></div>
+  <p class="landing-intro">Choose a quotation design for your customer or project. On the next screen, you can edit customer details, products, rates, discounts and terms.</p>
+  <div class="format-cards">
+   <button class="format-card" id="landing-classic" onclick="chooseLandingFormat('classic')"><div class="format-card-head"><span class="format-letter">FORMAT A</span><span class="radio-dot"></span></div><div class="format-thumb"><div class="thumb-head"></div><div class="thumb-line mid"></div><div class="thumb-line short"></div><div class="thumb-table"><div class="thumb-row"><span></span><span></span><span></span></div><div class="thumb-row"><span></span><span></span><span></span></div><div class="thumb-row"><span></span><span></span><span></span></div><div class="thumb-row"><span></span><span></span><span></span></div></div></div><h2>Classic</h2><p>A clean, straightforward quotation with one continuous item list and a final summary.</p><div class="feature-pills"><span>Simple</span><span>Professional</span></div></button>
+   <button class="format-card selected" id="landing-section" onclick="chooseLandingFormat('section')"><div class="format-card-head"><span class="format-letter">FORMAT B · RECOMMENDED</span><span class="radio-dot"></span></div><div class="format-thumb"><div class="thumb-head"></div><div class="thumb-line mid"></div><div class="thumb-line short"></div><div class="thumb-table"><div class="thumb-row"><span></span><span></span><span></span></div><div class="thumb-row"><span></span><span></span><span></span></div><div class="thumb-row"><span></span><span></span><span></span></div></div><div class="thumb-line short" style="margin-left:auto"></div><div class="thumb-table"><div class="thumb-row"><span></span><span></span><span></span></div><div class="thumb-row"><span></span><span></span><span></span></div></div></div><h2>Section Wise</h2><p>Group products into Ducting, Pipeline, Banquet or Restaurant sections, with section totals.</p><div class="feature-pills"><span>Grouped items</span><span>Section totals</span></div></button>
+   <button class="format-card" id="landing-premium" onclick="chooseLandingFormat('premium')"><div class="format-card-head"><span class="format-letter">FORMAT C</span><span class="radio-dot"></span></div><div class="format-thumb"><div class="thumb-head"></div><div class="thumb-line mid"></div><div class="thumb-line short"></div><div style="display:flex;gap:7px;margin-top:9px"><div style="height:28px;flex:1;background:#f0dedd;border-radius:3px"></div><div style="height:28px;flex:1;background:#f0dedd;border-radius:3px"></div></div><div class="thumb-table"><div class="thumb-row"><span></span><span></span><span></span></div><div class="thumb-row"><span></span><span></span><span></span></div><div class="thumb-row"><span></span><span></span><span></span></div></div></div><h2>Premium Project</h2><p>A polished presentation for larger projects and customer-facing proposals.</p><div class="feature-pills"><span>Elegant</span><span>Project-ready</span></div></button>
+  </div>
+  <div class="selected-preview" id="selectedFormatPreview">
+    <div class="preview-paper" id="landingQuotePaper">
+      <div class="mock-head"><div class="mock-brand"><img class="mock-logo-img" alt="TBHS"><div><b>THE BIG HOTEL STORE</b><small>Address · Phone · Email</small></div></div><div class="mock-company">www.thebighotelstore.com<br>Sales &amp; Project Solutions<br>India</div></div>
+      <div class="mock-ribbon">HOTELWARE · KITCHEN EQUIPMENT · HOSPITALITY SOLUTIONS</div>
+            <div class="mock-parties"><div><b>BILLING DETAILS</b><span><i>Quotation No</i> : QT-TBHS-EQP-000001</span><span><i>Date</i> : 26-10-2026</span><span><i>Valid Until</i> : 09-11-2026</span><span><i>Customer Name</i> : Sample Hotel &amp; Resort</span><span><i>Address</i> : Lucknow, Uttar Pradesh</span><span><i>GSTIN</i> :</span><span><i>Contact</i> :</span><span><i>Email</i> :</span></div><div><b>BILLING PARTNER</b><span><i>Partner Name</i> : The Big Hotel Store</span><span><i>Bank</i> :</span><span><i>Branch</i> :</span><span><i>A/C No</i> :</span><span><i>IFSC</i> :</span><span><i>Order By</i> :</span><span><i>Prepared By</i> : Employee Name</span></div></div>
+      <div class="mock-intro">Dear Sir/Madam,<br>Please find below our quotation for the listed products and services.</div>
+      <div class="mock-section-title" id="mockSectionTitle">DUCTING</div>
+      <table class="mock-items"><thead><tr><th>S.No.</th><th>Item description</th><th>Qty</th><th>Rate</th><th>Amount</th></tr></thead><tbody>
+      <tr><td>1</td><td><b>Stainless Steel Work Table</b><small>Model: TB-120 · Size: 1200 × 600 mm</small></td><td>2 Nos.</td><td>₹12,500</td><td>₹25,000</td></tr>
+      <tr><td>2</td><td><b>Commercial Kitchen Sink</b><small>Model: KS-02 · Size: Standard</small></td><td>1 No.</td><td>₹8,400</td><td>₹8,400</td></tr>
+      <tr><td>3</td><td><b>Wall Shelf — Double Tier</b><small>Model: WS-90 · Size: 900 mm</small></td><td>3 Nos.</td><td>₹3,200</td><td>₹9,600</td></tr>
+      <tr><td>4</td><td><b>Commercial Storage Rack</b><small>Model: SR-04 · Size: 4 tier</small></td><td>1 No.</td><td>₹7,800</td><td>₹7,800</td></tr>
+      </tbody></table>
+      <div class="mock-section-total"><span>Section Basic</span><b>₹50,800.00</b><span>GST</span><b>₹9,144.00</b><strong>Section Total</strong><strong>₹59,944.00</strong></div>
+      <div class="mock-section-title mock-second-section">PIPELINE / ADDITIONAL ITEMS</div>
+      <table class="mock-items"><tbody><tr><td>5</td><td><b>Installation &amp; accessories</b><small>As per project requirement</small></td><td>1 Lot</td><td>₹4,500</td><td>₹4,500</td></tr><tr><td>6</td><td><b>Delivery and handling</b><small>For the above order</small></td><td>1 Lot</td><td>₹1,500</td><td>₹1,500</td></tr></tbody></table>
+      <div class="mock-total"><div><span>Total Basic</span><b>₹56,800.00</b></div><div><span>GST</span><b>₹10,224.00</b></div><div class="grand"><span>Grand Total</span><b>₹67,024.00</b></div></div>
+      <div class="mock-terms"><b>TERMS &amp; CONDITIONS</b><ol><li>Prices and taxes are as mentioned above.</li><li>Delivery timeline will be confirmed after order confirmation.</li><li>Quotation is valid until the expiry date stated above.</li></ol></div>
+      <div class="mock-signatures"><span>Customer Acceptance / Signature</span><span>For The Big Hotel Store</span></div>
+      <div class="mock-footer"><span>www.thebighotelstore.com · Hospitality solutions</span><span>Quotation preview · Page 1</span></div>
+    </div>
+    <div class="selected-preview-info"><div class="landing-eyebrow" id="selectedFormatLabel">SELECTED FORMAT · B</div><h2 id="selectedFormatTitle">Section Wise quotation</h2><p id="selectedFormatDescription">Products are grouped under section headings, with section totals and a final summary.</p><div class="feature-pills" id="selectedFormatFeatures"><span>Section headings</span><span>Section totals</span><span>Final summary</span></div><p class="mock-preview-note">Full-page A4-style sample preview. The final quotation will use your selected design and actual entered product data.</p></div>
+  </div>
+  <div class="landing-bottom"><div class="landing-note"><b>What happens next?</b><br>Choose a design above, then use the Create Quotation button beside the heading to open the editable quotation workspace.</div></div>
+ </div>
+</section>
+
+
+
+  <aside class="editor"></aside><main class="workspace"></main><input id="productSearch"><span id="catalogCount"></span><div id="catalogueList"></div><select id="formatSelect"><option value="classic">A</option><option value="section">B</option><option value="premium">C</option></select></div>
+<header class="ap-top"><div class="ap-brand" onclick="showAppPage('Dashboard')"><img class="logo-img ap-logo" alt=""><div><b>Quotation Studio</b><small>THE BIG HOTEL STORE</small></div></div><nav class="ap-nav" id="apNav"></nav><button class="ap-new" onclick="newQuote()">＋ New quotation</button></header>
+<section class="nav-page" id="navPage" style="display:none"><div class="nav-page-head"><div><h1 id="navPageTitle">Dashboard</h1><p id="navPageSubtitle"></p></div><button class="btn primary" onclick="showAppPage('Create Quotation')">+ New Quotation</button></div><div id="navPageContent"></div></section>
+
+  
+<main id="viewEditor" class="ap-edit" hidden>
+<div class="ap-bar">
+<div class="ap-title"><h1 id="studioTitle">Quotation</h1><span class="ap-state" id="saveState">Draft</span></div>
+<div class="fmt-switch" id="fmtSwitch"><button data-f="classic" onclick="setFormat('classic')">A · Classic</button><button data-f="section" onclick="setFormat('section')">B · Section</button><button data-f="premium" onclick="setFormat('premium')">C · Premium</button></div>
+<div class="ap-spacer"></div>
+<button class="ap-btn" onclick="toggleDrawer()">⚙ Customize</button><button class="ap-btn" onclick="saveQuote()">💾 Save</button><button class="ap-btn" onclick="window.print()">🖨 Print</button>
+<div class="ap-dl"><span>Download</span><button class="ap-btn primary" onclick="exportExcel()">Excel</button><button class="ap-btn primary" onclick="exportPDF()">PDF</button><button class="ap-btn primary" onclick="exportCSV()">CSV</button></div>
+</div>
+<div class="ap-split">
+<section class="ap-left">
+<div class="ap-row2">
+<div class="ap-card"><h2>Customer</h2>
+      <label>Customer / Hotel Name *</label><input id="customerName" value="Sample Hotel & Resort" placeholder="Customer name">
+      <label>Address</label><textarea id="customerAddress">Lucknow, Uttar Pradesh</textarea>
+      <div class="two"><div><label>GSTIN</label><input id="customerGST" placeholder="Customer GSTIN"></div><div><label>Contact Person</label><input id="contactPerson" placeholder="Contact name"></div></div>
+      <div class="two"><div><label>Mobile</label><input id="customerMobile" placeholder="Phone"></div><div><label>Email</label><input id="customerEmail" placeholder="Email"></div></div>
+    </div>
+<div class="ap-card"><h2>Quotation</h2>
+      <label>Quotation No.</label><input id="quoteNo" value="QT-TBHS-EQP-000001">
+      <div class="two"><div><label>Date</label><input id="quoteDate" type="date"></div><div><label>Expiry Date</label><input id="expiryDate" type="date"></div></div>
+      <label>Prepared By</label><input id="preparedBy" placeholder="Employee name">
+    </div>
+</div>
+<div class="ap-card ap-items">
+<div class="ap-ihead"><h2>Items <span class="ap-count" id="itemCount">0</span></h2><span style="font-size:11px;color:#8a7b7d">Press <b>/</b> to search · <b>Enter</b> adds · arrow keys move between rows</span></div>
+<div class="ap-tools"><div class="ap-search"><input id="apSearch" placeholder="🔍  Search product, brand, code or model…" autocomplete="off" oninput="apFind()" onfocus="apFind()" onblur="setTimeout(()=>document.getElementById('apResults').hidden=true,150)" onkeydown="apKey(event)"><div class="ap-results" id="apResults" hidden></div></div>
+<div class="ap-sec"><label>Add to section</label><input id="addSection" list="secList" placeholder="e.g. CROCKERY"></div>
+<button class="ap-btn" onclick="addBlank()">＋ Blank line</button><button class="ap-btn" onclick="showAppPage('Product Catalogue')">⬆ Import price lists</button><button class="ap-btn" id="intBtn" onclick="toggleInternal()" title="Show every internal column at once">👁 All internal</button></div>
+<div id="colChips" class="chipbar no-print"></div>
+<div id="fmtBar" class="fmtbar" style="display:none"><b id="fmtTarget">—</b><label>Size <button onclick="stStep(-10)">−</button><output id="fmtSize">100%</output><button onclick="stStep(10)">＋</button></label><label>Colour <input type="color" id="fmtColor" value="#222222" oninput="stSet('color',this.value)"></label><label><input type="checkbox" id="fmtBold" onchange="stSet('bold',this.checked)"> Bold</label><select id="fmtScope" onchange="updFmtBar()"><option value="body">Applies to: cells</option><option value="head">Applies to: header</option></select><button id="fmtToCol" onclick="cellsToCols()">Select whole column</button><button onclick="stClear()">Reset</button><button onclick="selClear()">✕</button></div>
+<div class="ed-wrap" id="edWrap"><table id="itemsEditor"></table></div>
+<div class="ap-empty" id="apEmpty">No products yet. Search above to add the first one, or press <b>＋ Blank line</b>.</div>
+<datalist id="secList"></datalist>
+<div class="ap-sum"><div class="ap-sumin"><label>Default GST %<input id="defaultGST" type="number" min="0" max="100" value="18" oninput="liveUpdate()"></label><label>Overall discount %<input id="globalDiscount" type="number" min="0" max="100" value="0" oninput="liveUpdate()"></label></div>
+<div class="ap-sumnum"><div><span>Basic</span><b id="tBasic">₹ 0.00</b></div><div><span>Discount</span><b id="tDisc">₹ 0.00</b></div><div><span>GST</span><b id="tGst">₹ 0.00</b></div><div class="grand"><span>Grand total</span><b id="tTotal">₹ 0.00</b></div></div></div>
+</div>
+<details class="ap-card"><summary>Billing partner &amp; bank</summary>
+      <label>Company / Partner</label><input id="partnerName" value="TBHS Billing Partner">
+      <div class="two"><div><label>Bank</label><input id="bankName" placeholder="Bank name"></div><div><label>Branch</label><input id="bankBranch" placeholder="Branch"></div></div>
+      <div class="two"><div><label>A/C No.</label><input id="bankAccount" placeholder="Account number"></div><div><label>IFSC</label><input id="bankIFSC" placeholder="IFSC"></div></div>
+      <label>Order By / Reference</label><input id="orderBy" placeholder="Contact or reference">
+    </details>
+<details class="ap-card"><summary>Specification &amp; terms</summary><label>Specification</label>
+      <textarea id="specifications" placeholder="Special requirements, specifications, delivery notes...">Demo specification — replace this text with the actual project requirements.</textarea>
+    <label>Terms & Conditions</label><textarea id="terms">1. Prices are subject to final confirmation.
+2. Delivery and installation as mutually agreed.
+3. Taxes are calculated as shown in this quotation.
+4. Quotation valid until the expiry date mentioned above.</textarea></details>
+<details class="ap-card"><summary>Add a new product to the catalogue</summary>
+        <label>Product name</label><input id="newName" placeholder="e.g. Soup Bowl">
+        <div class="two"><div><label>Brand</label><input id="newBrand" placeholder="Brand"></div><div><label>Item code</label><input id="newCode" placeholder="Code"></div></div>
+        <div class="two"><div><label>Model</label><input id="newModel" placeholder="Model"></div><div><label>Unit</label><input id="newUnit" value="PCS"></div></div>
+        <div class="two"><div><label>Rate (₹)</label><input id="newRate" type="number" value="0"></div><div><label>GST %</label><input id="newGST" type="number" value="18"></div></div>
+        <div class="actions"><button class="btn primary" onclick="addCatalogueProduct()">Add Product</button></div>
+      </details>
+</section>
+<section class="ap-right"><div class="ap-pvbar"><span>Live preview</span><div><button onclick="pvZoom(-1)">−</button><span id="pvZ">Fit</span><button onclick="pvZoom(1)">＋</button><button onclick="pvFit()">Fit</button></div></div><div class="ap-pvscroll" id="pvScroll"><article class="paper" id="paper">
+      <header class="paper-head">
+        <div class="logo"><img class="logo-img" alt="TBHS logo"><div class="logo-text">THE BIG HOTEL STORE</div></div>
+        <div class="head-contact" id="headContact"></div>
+      </header>
+      <div class="ribbon">HOTELWARE · KITCHEN EQUIPMENT · HOSPITALITY SOLUTIONS</div>
+      <div class="quote-heading"><div class="quote-meta" id="metaPreview"></div></div>
+      <div class="parties">
+        <section class="party"><h3>BILLING DETAILS</h3><div id="billPreview"></div></section>
+        <section class="party"><h3>BILLING PARTNER</h3><div id="partnerPreview"></div></section>
+      </div>
+      <div class="spec"><b>Custom Items Specification</b><div id="specPreview"></div></div>
+      
+      
+      <div id="itemsPreview"></div>
+      <table class="final-totals" id="finalTotals"></table>
+      <section class="terms"><b>TERMS & CONDITIONS</b><div id="termsPreview"></div></section>
+      <div class="signature"><div class="signline">Customer Acceptance / Signature</div><div class="signline">For The Big Hotel Store</div></div>
+      <footer class="paper-foot"><span class="foot-brand"><img class="logo-img foot-logo" alt="">www.thebighotelstore.com · Test template — verify all details</span><span id="pageLabel">Page 1</span></footer>
+    </article></div></section>
+</div>
+</main>
+<aside class="ap-drawer" id="drawer" hidden><div class="ap-dhead"><b>Customize</b><button onclick="toggleDrawer()">✕</button></div><section class="panel" id="companyPanel">
+      <h3>COMPANY LETTERHEAD</h3>
+      <label>Address</label><input id="companyAddr" placeholder="Branch / address line" oninput="companySave()">
+      <div class="two"><div><label>Phone</label><input id="companyPhone" placeholder="+91 …" oninput="companySave()"></div><div><label>Email</label><input id="companyEmail" placeholder="sales@…" oninput="companySave()"></div></div>
+      <p class="mini-note">Shown on one line under the company name on every quotation and PDF. Saved once for all formats.</p>
+    </section><section class="panel" id="layoutPanel">
+      <h3>LAYOUT &amp; STYLE</h3>
+      <label>Accent colour</label><input type="color" id="layAccent" value="#641d25" oninput="laySet('accent',this.value)">
+      <div class="two"><div><label>Page orientation</label><select id="layOrient" onchange="laySet('orient',this.value)"><option value="auto">Auto</option><option value="portrait">Portrait</option><option value="landscape">Landscape</option></select></div></div>
+      <label>Text size</label><div id="szBox"></div>
+      <label>Paper size (PDF)</label><select id="layPaper" onchange="laySet('paper',this.value)"><option value="a4">A4 (standard)</option><option value="a3">A3 (more room for many columns)</option></select>
+      <label>Show on quotation</label>
+      <div class="chk-grid"><label><input type="checkbox" data-k="head" checked onchange="layHide('head',!this.checked)"> Letterhead</label><label><input type="checkbox" data-k="ribbon" checked onchange="layHide('ribbon',!this.checked)"> Ribbon</label><label><input type="checkbox" data-k="parties" checked onchange="layHide('parties',!this.checked)"> Bill to / partner</label><label><input type="checkbox" data-k="spec" checked onchange="layHide('spec',!this.checked)"> Specification</label><label><input type="checkbox" data-k="terms" checked onchange="layHide('terms',!this.checked)"> Terms</label><label><input type="checkbox" data-k="sign" checked onchange="layHide('sign',!this.checked)"> Signatures</label><label><input type="checkbox" data-k="foot" checked onchange="layHide('foot',!this.checked)"> Footer</label></div>
+      <div class="defbox"><b>Defaults for all formats</b><small>Layout, text sizes and column styles apply to formats A, B and C alike. Save them as your default to come back to them any time.</small><button class="btn primary" onclick="saveDefaults()">⭐ Save current as default</button><button class="btn" onclick="restoreDefaults()">↺ Back to my default</button><button class="btn" onclick="factoryReset()">Factory settings</button></div>
+      <div class="actions"><button class="btn" onclick="openCols()">⚙ Edit columns</button></div>
+    </section></aside>
+<dialog id="colDlg"><h2>Quotation columns</h2><p class="mini-note"><b>Formula</b> columns calculate automatically from other columns (use the "key" shown, e.g. <code>qty*rate*(1-discount/100)</code>). <b>Internal</b> columns (cost, margin, notes) show on screen when 👁 is on but never reach the PDF or print. <b>Hide</b> removes a column everywhere. Widths rebalance automatically so the PDF never breaks.</p><div id="colList"></div><div class="actions"><button class="btn" onclick="colAdd(cols.length-1)">+ Add column at end</button><button class="btn" onclick="colReset()">Reset to default</button><button class="btn primary" onclick="document.getElementById('colDlg').close()">Done</button></div></dialog>
+<div class="toast" id="toast"></div>
+
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+<script>
+
+let landingFormat="section";
+function chooseLandingFormat(format){
+ landingFormat=format;["classic","section","premium"].forEach(f=>document.getElementById("landing-"+f).classList.toggle("selected",f===format));
+ const data={classic:{label:"SELECTED FORMAT · A",title:"Classic quotation",desc:"A continuous item list with customer details and one final summary.",features:["Simple item list","Professional","Final summary"]},section:{label:"SELECTED FORMAT · B",title:"Section Wise quotation",desc:"Group products into sections with individual section totals and a final summary.",features:["Section headings","Section totals","Final summary"]},premium:{label:"SELECTED FORMAT · C",title:"Premium Project quotation",desc:"A polished presentation for larger projects and customer-facing proposals.",features:["Project-ready","Premium styling","Final summary"]}}[format];
+ document.getElementById("selectedFormatLabel").textContent=data.label;document.getElementById("selectedFormatTitle").textContent=data.title;document.getElementById("selectedFormatDescription").textContent=data.desc;document.getElementById("selectedFormatFeatures").innerHTML=data.features.map(x=>`<span>${x}</span>`).join("");
+ const paper=document.getElementById("landingQuotePaper");paper.classList.remove("format-classic","format-section","format-premium");paper.classList.add("format-"+format);
+ document.getElementById("mockSectionTitle").textContent=format==="classic"?"QUOTATION ITEMS":format==="premium"?"PROJECT SCOPE & ITEMS":"DUCTING";
+ document.querySelector(".mock-second-section").style.display=format==="classic"?"none":"block";
+}
+function startCreate(){setFormat(landingFormat);document.getElementById("navPage").style.display="none";document.getElementById("landingPage").style.display="none";document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.innerText.replace(/\s+/g," ").trim()==="Create Quotation"));document.getElementById("appRoot").classList.add("editing");document.querySelector(".editor").style.display="block";document.querySelector(".workspace").style.display="block";window.scrollTo(0,0);}
+function openFullPageQuote(){
+  const app=document.getElementById("appRoot");
+  app.classList.add("full-quote");
+  document.getElementById("fullPageCreateBtn").textContent="Back to editor";
+  document.getElementById("fullPageCreateBtn").onclick=closeFullPageQuote;
+  document.querySelector(".topbar p").textContent="Full-page quotation · Double-click item cells or text to edit";
+  enableFullPageEditing();
+  window.scrollTo(0,0);
+}
+function closeFullPageQuote(){
+  const app=document.getElementById("appRoot");
+  app.classList.remove("full-quote");
+  const btn=document.getElementById("fullPageCreateBtn");btn.textContent="Create";btn.onclick=openFullPageQuote;
+  document.querySelector(".topbar p").textContent="Live A4 preview · Edit details or add products on the left";
+  window.scrollTo(0,0);
+}
+function enableFullPageEditing(){
+  const paper=document.getElementById("paper");
+  paper.querySelectorAll(".quote-heading h2,.quote-meta span,.party p,.party h3,.spec div,.terms,.signature .signline").forEach(el=>el.setAttribute("data-full-edit","true"));
+  paper.ondblclick=function(e){
+    if(e.target.closest("button"))return;
+    const el=e.target.closest("[data-full-edit]");
+    if(!el||el.isContentEditable)return;
+    el.contentEditable="true";el.focus();
+    const finish=()=>{el.contentEditable="false";el.removeAttribute("data-editing")};
+    el.addEventListener("blur",finish,{once:true});
+    el.addEventListener("keydown",function(ev){if(ev.key==="Escape"){document.execCommand("undo");el.blur()}if(ev.key==="Enter"&&!ev.shiftKey&&el.tagName!=="DIV"){ev.preventDefault();el.blur()}},{once:true});
+  };
+}
+function backToFormats(){document.getElementById("appRoot").classList.remove("full-quote","editing");document.querySelector(".editor").style.display="none";document.querySelector(".workspace").style.display="none";document.getElementById("navPage").style.display="none";document.getElementById("landingPage").style.display="block";document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.innerText.replace(/\s+/g," ").trim()==="Create Quotation"));window.scrollTo(0,0);}
+
+const DEMO_CATALOGUE = [
+ {id:1,name:"Coffee Cup 200ml",brand:"Ariane",code:"P-20",model:"",unit:"PCS",rate:450,gst:18,category:"Restaurant"},
+ {id:2,name:"Sauce Bowl",brand:"KTC",code:"K-32",model:"",unit:"PCS",rate:250,gst:18,category:"Restaurant"},
+ {id:3,name:"Water Glass 300ml",brand:"Bormioli",code:"B-11",model:"",unit:"PCS",rate:120,gst:18,category:"Restaurant"},
+ {id:4,name:"Trolley",brand:"KTC",code:"T-14",model:"",unit:"PCS",rate:12000,gst:18,category:"Banquet"},
+ {id:5,name:"Food Pan 1/1",brand:"Cambro",code:"C-09",model:"",unit:"PCS",rate:1800,gst:18,category:"Banquet"},
+ {id:6,name:"Induction Cooktop",brand:"Fagor",code:"F-03",model:"",unit:"PCS",rate:29000,gst:18,category:"Kitchen"},
+ {id:7,name:"Food Warmer",brand:"Hamilton",code:"G-12",model:"",unit:"PCS",rate:4500,gst:18,category:"Kitchen"},
+ {id:8,name:"Exhaust Hood",brand:"Demo Brand",code:"EX-01",model:"EH-900",unit:"PCS",rate:28000,gst:18,category:"Ducting"}
+];
+let catalogue = JSON.parse(localStorage.getItem("tbhs_catalogue") || "null") || DEMO_CATALOGUE.slice();
+let items = [
+ {id:101,section:"Banquet",code:"P-20",name:"Coffee Cup 200ml",brand:"Ariane",model:"",type:"Crockery",size:"200 ml",qty:24,unit:"PCS",rate:450,discount:0,gst:18},
+ {id:102,section:"Banquet",code:"K-32",name:"Sauce Bowl",brand:"KTC",model:"",type:"Crockery",size:"6 inch",qty:12,unit:"PCS",rate:250,discount:5,gst:18},
+ {id:103,section:"Restaurant",code:"EX-01",name:"Exhaust Hood",brand:"Demo Brand",model:"EH-900",type:"Ducting",size:"900 mm",qty:1,unit:"PCS",rate:28000,discount:0,gst:18}
+];
+let currentFormat="section";
+const money=n=>new Intl.NumberFormat("en-IN",{style:"currency",currency:"INR",maximumFractionDigits:2}).format(Number(n)||0);
+const num=n=>Number(n)||0;
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const val=id=>document.getElementById(id).value;
+function dateISO(offset=0){let d=new Date();d.setDate(d.getDate()+offset);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
+document.getElementById("quoteDate").value=dateISO(0);document.getElementById("expiryDate").value=dateISO(14);
+function toast(msg){const el=document.getElementById("toast");el.textContent=msg;el.style.display="block";setTimeout(()=>el.style.display="none",2300)}
+function setFormat(format){currentFormat=format;document.body.className="format-"+format;["classic","section","premium"].forEach(f=>document.getElementById("design-"+f).classList.toggle("selected",f===format));document.getElementById("formatSelect").value=format;renderQuote()}
+function addProduct(p){items.push({id:Date.now()+Math.random(),section:p.category||"General",code:p.code||"",name:p.name||"New product",brand:p.brand||"",model:p.model||"",type:p.category||"",size:"",qty:1,unit:p.unit||"PCS",rate:num(p.rate),discount:0,gst:p.gst===undefined?num(val("defaultGST")):num(p.gst)});renderQuote();toast("Product added to quotation")}
+function renderCatalogue(){const q=val("productSearch").toLowerCase();const list=catalogue.filter(p=>[p.name,p.brand,p.code,p.model,p.category].join(" ").toLowerCase().includes(q));document.getElementById("catalogCount").textContent=catalogue.length+" items";document.getElementById("catalogueList").innerHTML=list.map(p=>`<div class="catalogue-item"><div><b>${esc(p.name)}</b><small>${esc(p.brand)} · ${esc(p.code)} · ${esc(p.category||"General")} · ${money(p.rate)}</small></div><button class="btn small" onclick="addFromCatalogue(${p.id})">+ Add</button></div>`).join("")||'<p class="mini-note">No matching products.</p>'}
+function addFromCatalogue(id){const p=catalogue.find(x=>x.id===id);if(p)addProduct(p)}
+function addCatalogueProduct(){const name=val("newName").trim();if(!name){toast("Enter a product name first");return}const p={id:Date.now(),name,brand:val("newBrand"),code:val("newCode"),model:val("newModel"),unit:val("newUnit")||"PCS",rate:num(val("newRate")),gst:num(val("newGST")),category:"General"};catalogue.push(p);localStorage.setItem("tbhs_catalogue",JSON.stringify(catalogue));["newName","newBrand","newCode","newModel"].forEach(id=>document.getElementById(id).value="");renderCatalogue();toast("Catalogue product saved in this browser")}
+function itemNet(i){return num(i.qty)*num(i.rate)*(1-num(i.discount)/100)}
+function itemGST(i){return itemNet(i)*num(i.gst)/100}
+function groupedItems(){const groups={};items.forEach(i=>{const key=currentFormat==="classic"?"All Items":(i.section||"General");(groups[key] ||= []).push(i)});return groups}
+
+function addLineBelow(id){const index=items.findIndex(i=>i.id===id);if(index<0)return;const source=items[index];items.splice(index+1,0,{...source,id:Date.now()+Math.random(),name:"New product",code:"",qty:1,rate:0,discount:0});renderQuote();toast("Line added — double-click cells to edit")}
+function removeLine(id){items=items.filter(i=>i.id!==id);renderQuote();toast("Line removed")}
+
+let activeAppPage="Create Quotation";
+function showAppPage(page){
+  if(page==="Create Quotation"){backToFormats();return}
+  activeAppPage=page;
+  const app=document.getElementById("appRoot");
+  app.classList.remove("editing","full-quote");
+  document.querySelector(".editor").style.display="none";
+  document.querySelector(".workspace").style.display="none";
+  document.getElementById("landingPage").style.display="none";
+  document.getElementById("navPage").style.display="block";
+  document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.innerText.replace(/\s+/g," ").trim()===page));
+  document.getElementById("navPageTitle").textContent=page;
+  const subtitles={
+    "Dashboard":"Your quotation workspace at a glance.",
+    "Manage Quotations":"Find, review, reopen and export quotations saved in this browser.",
+    "Product Catalogue":"Maintain the demo product list used when building quotations.",
+    "Customers":"Customer records gathered from saved quotations.",
+    "Employees":"Demo employee directory and responsibilities.",
+    "Reports / Export":"Export quotation history and review basic sales totals.",
+    "Settings":"Configure default quotation details for this test version."
+  };
+  document.getElementById("navPageSubtitle").textContent=subtitles[page]||"TBHS workspace";
+  let content=document.getElementById("navPageContent");
+  if(page==="Dashboard") content=renderDashboard();
+  else if(page==="Manage Quotations") content=renderManageQuotes();
+  else if(page==="Product Catalogue") content=renderCataloguePage();
+  else if(page==="Customers") content=renderCustomersPage();
+  else if(page==="Employees") content=renderEmployeesPage();
+  else if(page==="Reports / Export") content=renderReportsPage();
+  else if(page==="Settings") content=renderSettingsPage();
+  document.getElementById("navPageContent").innerHTML=content;
+  window.scrollTo(0,0);
+}
+function readSavedQuotes(){try{return JSON.parse(localStorage.getItem("tbhs_quotes")||"[]")}catch(e){return []}}
+function pageTable(headers, rows, emptyText="No records to show yet."){
+ if(!rows.length)return `<div class="muted" style="padding:20px 0">${emptyText}</div>`;
+ return `<div class="page-table-wrap"><table class="page-table"><thead><tr>${headers.map(h=>`<th>${h}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c??""}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+}
+function renderDashboard(){
+ const q=readSavedQuotes(), total=q.reduce((a,x)=>a+num(x.total),0);
+ const latest=q.slice(0,5);
+ return `<div class="page-grid">
+  <div class="page-card"><div class="muted">SAVED QUOTATIONS</div><div class="metric">${q.length}</div><div class="muted">Stored in this browser for testing</div></div>
+  <div class="page-card"><div class="muted">TOTAL QUOTATION VALUE</div><div class="metric">${money(total)}</div><div class="muted">Based on saved demo quotations</div></div>
+  <div class="page-card"><div class="muted">PRODUCTS IN CATALOGUE</div><div class="metric">${catalogue.length}</div><div class="muted">Sample catalogue records</div></div>
+ </div><section class="page-panel"><h2>Quick actions</h2><div class="page-toolbar"><button class="btn primary" onclick="showAppPage('Create Quotation')">+ Create quotation</button><button class="btn" onclick="showAppPage('Product Catalogue')">Browse catalogue</button><button class="btn" onclick="showAppPage('Manage Quotations')">Manage quotations</button><button class="btn" onclick="showAppPage('Reports / Export')">Reports & export</button></div></section>
+ <section class="page-panel"><h2>Recent quotations</h2>${pageTable(["Quotation No.","Customer","Date","Total",""],latest.map(x=>[`<b>${esc(x.quoteNo||"—")}</b>`,esc(x.customer||"—"),esc(x.date||"—"),money(x.total),`<button onclick="reopenSavedQuote('${String(x.quoteNo||"").replace(/'/g,"")}')">Open</button>`]),"No saved quotations yet. Create and save a test quotation to see it here.")}</section>`;
+}
+function renderManageQuotes(){
+ const q=readSavedQuotes();
+ return `<section class="page-panel"><h2>Quotation history</h2><div class="page-toolbar"><input id="quoteFilter" placeholder="Search quotation no. or customer..." oninput="filterQuoteTable()"><button class="btn" onclick="exportHistory()">Export CSV</button><button class="btn primary" onclick="showAppPage('Create Quotation')">+ New quotation</button></div><div id="quoteHistoryTable">${quoteHistoryTable(q)}</div></section>`;
+}
+function quoteHistoryTable(q){return pageTable(["Quotation No.","Customer","Date","Expiry","Total","Actions"],q.map(x=>[`<b>${esc(x.quoteNo||"—")}</b>`,esc(x.customer||"—"),esc(x.date||"—"),esc(x.expiry||"—"),money(x.total),`<button onclick="reopenSavedQuote('${String(x.quoteNo||"").replace(/'/g,"")}')">Open</button>`]),"No saved quotations in this browser yet.")}
+function filterQuoteTable(){const q=readSavedQuotes(),term=(document.getElementById("quoteFilter")?.value||"").toLowerCase();document.getElementById("quoteHistoryTable").innerHTML=quoteHistoryTable(q.filter(x=>`${x.quoteNo} ${x.customer}`.toLowerCase().includes(term)))}
+function reopenSavedQuote(quoteNo){const q=readSavedQuotes().find(x=>x.quoteNo===quoteNo);if(!q){toast("Saved record not found");return}landingFormat=q.format||"section";startCreate();if(q.fields)Object.entries(q.fields).forEach(([k,v])=>{const el=document.getElementById(k);if(el)el.value=v});if(Array.isArray(q.items))items=q.items.map(i=>({...i}));if(q.globalDiscount!==undefined)document.getElementById("globalDiscount").value=q.globalDiscount;setFormat(q.format||"section");toast("Saved quotation loaded with all products")}
+function renderCataloguePage(){
+ const rows=catalogue.map(p=>[`<b>${esc(p.name)}</b>`,esc(p.brand||"—"),esc(p.code||"—"),esc(p.model||"—"),esc(p.category||"—"),money(p.rate),`<button onclick="addProductFromPage(${p.id})">Add to quotation</button>`]);
+ return `<section class="page-panel"><h2>Product catalogue <span class="muted">${catalogue.length} demo products</span></h2><div class="page-toolbar"><input id="catalogPageSearch" placeholder="Search product, brand, code or model..." oninput="filterCataloguePage()"><button class="btn primary" onclick="document.getElementById('newProductForm').style.display='grid'">+ Add product</button></div><div id="catalogPageTable">${cataloguePageTable(rows)}</div><div id="newProductForm" class="page-form" style="display:none;margin-top:20px"><label>Product name<input id="pageNewName" placeholder="Product name"></label><label>Brand<input id="pageNewBrand" placeholder="Brand"></label><label>Item code<input id="pageNewCode" placeholder="Item code"></label><label>Model<input id="pageNewModel" placeholder="Model"></label><label>Category<input id="pageNewCategory" placeholder="e.g. Banquet"></label><label>Rate (₹)<input id="pageNewRate" type="number" value="0"></label><div class="wide"><button class="btn primary" onclick="saveCatalogueFromPage()">Save product</button></div></div></section>`;
+}
+function cataloguePageTable(rows){return pageTable(["Product","Brand","Item Code","Model","Category","Default Rate","Action"],rows)}
+function filterCataloguePage(){const t=(document.getElementById("catalogPageSearch")?.value||"").toLowerCase();document.getElementById("catalogPageTable").innerHTML=cataloguePageTable(catalogue.filter(p=>[p.name,p.brand,p.code,p.model,p.category].join(" ").toLowerCase().includes(t)).map(p=>[`<b>${esc(p.name)}</b>`,esc(p.brand||"—"),esc(p.code||"—"),esc(p.model||"—"),esc(p.category||"—"),money(p.rate),`<button onclick="addProductFromPage(${p.id})">Add to quotation</button>`]))}
+function addProductFromPage(id){const p=catalogue.find(x=>x.id===id);if(p){addProduct(p);toast("Added to the current quotation draft");}}
+function saveCatalogueFromPage(){const name=document.getElementById("pageNewName").value.trim();if(!name){toast("Enter a product name");return}catalogue.push({id:Date.now(),name,brand:document.getElementById("pageNewBrand").value,code:document.getElementById("pageNewCode").value,model:document.getElementById("pageNewModel").value,category:document.getElementById("pageNewCategory").value||"General",rate:num(document.getElementById("pageNewRate").value),unit:"PCS",gst:18});renderCatalogue();showAppPage("Product Catalogue");toast("Product added to this test session");}
+function renderCustomersPage(){
+ const map={};readSavedQuotes().forEach(q=>{const n=q.customer||"Unnamed customer";if(!map[n])map[n]={name:n,count:0,last:q.date||"—",total:0};map[n].count++;map[n].total+=num(q.total)});
+ const rows=Object.values(map).map(c=>[`<b>${esc(c.name)}</b>`,c.count,c.last,money(c.total),`<button onclick="openCustomerDraft('${c.name.replace(/'/g,"")}')">Use in quotation</button>`]);
+ return `<section class="page-panel"><h2>Customer directory</h2><p class="muted">Customers are collected from quotations saved in this browser. Full customer records will be connected later.</p>${pageTable(["Customer / Hotel","Quotes","Last Quoted","Total Quoted","Action"],rows,"No customers yet. Save a quotation to build the customer directory.")}</section>`;
+}
+function openCustomerDraft(name){showAppPage("Create Quotation");document.getElementById("customerName").value=name;renderQuote();document.getElementById("customerName").focus()}
+function renderEmployeesPage(){return `<div class="page-grid"><div class="page-card"><div class="muted">WORKSPACE ACCESS</div><div class="metric">Local</div><div class="muted">This test app runs in one browser only.</div></div><div class="page-card"><div class="muted">EMPLOYEE RECORDS</div><div class="metric">3</div><div class="muted">Sample team entries</div></div><div class="page-card"><div class="muted">PERMISSIONS</div><div class="metric">Demo</div><div class="muted">No real sign-in or role enforcement yet.</div></div></div><section class="page-panel"><h2>Employee directory (sample)</h2>${pageTable(["Employee","Role","Access","Status"],[["Quotation Admin","Administrator","Settings, reports, quotations","Demo"],["Sales Executive","Quotation creator","Create and edit quotations","Demo"],["Catalogue Manager","Catalogue editor","Product catalogue","Demo"]])}<p class="muted">Employee accounts and shared access require a backend and authentication, which are not included in this standalone HTML test.</p></section>`}
+function renderReportsPage(){const q=readSavedQuotes(),total=q.reduce((a,x)=>a+num(x.total),0);return `<div class="page-grid"><div class="page-card"><div class="muted">QUOTATIONS SAVED</div><div class="metric">${q.length}</div></div><div class="page-card"><div class="muted">TOTAL VALUE</div><div class="metric">${money(total)}</div></div><div class="page-card"><div class="muted">AVERAGE QUOTATION</div><div class="metric">${money(q.length?total/q.length:0)}</div></div></div><section class="page-panel"><h2>Export reports</h2><p class="muted">Export saved quotation history from this browser as a CSV file for Excel.</p><div class="page-toolbar"><button class="btn primary" onclick="exportHistory()">Download quotation history CSV</button><button class="btn" onclick="showAppPage('Manage Quotations')">View quotation history</button></div></section>`}
+function getSettings(){try{return JSON.parse(localStorage.getItem("tbhs_settings")||"{}")}catch(e){return {}}}
+function renderSettingsPage(){const s=Object.assign({supplier:"The Big Hotel Store",website:"www.thebighotelstore.com",gst:18,validity:14,terms:"Prices and taxes are as mentioned above. Delivery timeline will be confirmed after order confirmation."},getSettings());return `<section class="page-panel"><h2>Quotation defaults</h2><p class="muted">Saved in this browser. New quotations use the default GST and validity.</p><div class="page-form"><label>Supplier name<input id="settingSupplier" value="${esc(s.supplier)}"></label><label>Website<input id="settingWebsite" value="${esc(s.website)}"></label><label>Default GST (%)<input id="settingGST" type="number" value="${esc(s.gst)}"></label><label>Default validity (days)<input id="settingValidity" type="number" value="${esc(s.validity)}"></label><label class="wide">Default terms<textarea id="settingTerms" rows="3">${esc(s.terms)}</textarea></label><div class="wide"><button class="btn primary" onclick="saveDemoSettings()">Save settings</button></div></div></section>`}
+function applySettings(){const s=getSettings();if(s.gst!==undefined)document.getElementById("defaultGST").value=s.gst;if(s.validity!==undefined)document.getElementById("expiryDate").value=dateISO(num(s.validity))}
+function saveDemoSettings(){localStorage.setItem("tbhs_settings",JSON.stringify({supplier:document.getElementById("settingSupplier").value,website:document.getElementById("settingWebsite").value,gst:num(document.getElementById("settingGST").value),validity:num(document.getElementById("settingValidity").value),terms:document.getElementById("settingTerms").value}));toast("Demo settings saved in this browser")}
+
+function showNavNotice(section){showAppPage(section)}
+function enableCellEditing(){const table=document.getElementById("itemsPreview");table.ondblclick=function(e){const td=e.target.closest("td[data-field]");if(!td||td.isContentEditable)return;const tr=td.closest("tr"),item=items.find(x=>String(x.id)===tr.dataset.itemId);if(!item)return;const field=td.dataset.field,original=item[field];td.contentEditable="true";td.focus();const finish=()=>{td.contentEditable="false";let value=td.textContent.trim();if(["qty","rate","discount","gst"].includes(field)){value=Number(value.replace(/[₹,%\s,]/g,""));if(!Number.isFinite(value))value=original;item[field]=value}else item[field]=value;renderQuote()};td.onblur=finish;td.onkeydown=function(ev){if(ev.key==="Enter"){ev.preventDefault();td.blur()}if(ev.key==="Escape"){item[field]=original;renderQuote()}}}}
+
+function renderQuote(){
+ const meta=document.getElementById("metaPreview");meta.innerHTML=`<div><b>Quotation No.</b><span>${esc(val("quoteNo"))}</span></div><div><b>Date</b><span>${esc(val("quoteDate"))}</span></div><div><b>Expiry Date</b><span>${esc(val("expiryDate"))}</span></div>`;
+ document.getElementById("billPreview").innerHTML=`<p><b>${esc(val("customerName")||"Customer name")}</b></p><p>${esc(val("customerAddress"))}</p><p>GSTIN: ${esc(val("customerGST")||"—")}</p><p>Contact: ${esc(val("contactPerson")||"—")} · ${esc(val("customerMobile")||"—")}</p><p>Email: ${esc(val("customerEmail")||"—")}</p>`;
+ document.getElementById("partnerPreview").innerHTML=`<p><b>${esc(val("partnerName")||"—")}</b></p><p>Bank: ${esc(val("bankName")||"—")}</p><p>Branch: ${esc(val("bankBranch")||"—")}</p><p>A/C No.: ${esc(val("bankAccount")||"—")}</p><p>IFSC: ${esc(val("bankIFSC")||"—")}</p><p>Order By: ${esc(val("orderBy")||"—")}</p>`;
+ document.getElementById("specPreview").textContent=val("specifications")||"—";
+ const groups=groupedItems();let html="",basic=0,gst=0,discountTotal=0;
+ Object.entries(groups).forEach(([section,arr],gi)=>{
+   html+=`<div class="section-title">${currentFormat==="classic"?"":`${gi+1}. `}${esc(section.toUpperCase())}</div><table class="items-table"><thead><tr><th>Sr.</th><th>Item Code</th><th>Qty</th><th>Unit</th><th>Particulars</th><th>Type</th><th>Brand</th><th>Model</th><th>Size</th><th class="num">Rate</th><th class="num">Disc.%</th><th class="num">Amount</th><th class="num">GST%</th><th>+/−</th></tr></thead><tbody>`;
+   if(!arr.length)html+='<tr><td colspan="14" class="empty">No products added yet — add products from the catalogue.</td></tr>';
+   arr.forEach(i=>{const gross=num(i.qty)*num(i.rate),net=itemNet(i),disc=gross-net;basic+=net;gst+=itemGST(i);discountTotal+=disc;html+=`<tr data-item-id="${i.id}"><td>${items.indexOf(i)+1}</td><td data-field="code">${esc(i.code)}</td><td data-field="qty">${num(i.qty)}</td><td data-field="unit">${esc(i.unit)}</td><td data-field="name">${esc(i.name)}</td><td data-field="type">${esc(i.type)}</td><td data-field="brand">${esc(i.brand)}</td><td data-field="model">${esc(i.model)}</td><td data-field="size">${esc(i.size)}</td><td data-field="rate" class="num">${money(i.rate)}</td><td data-field="discount" class="num">${num(i.discount).toFixed(1)}%</td><td class="num">${money(net)}</td><td data-field="gst" class="num">${num(i.gst)}%</td><td class="editor-table-actions"><button class="cell-btn" title="Add line below" onclick="addLineBelow(${i.id})">+</button><button class="cell-btn" title="Remove line" onclick="removeLine(${i.id})">−</button></td></tr>`});
+   html+="</tbody></table>";
+   if(currentFormat==="section"){const sb=arr.reduce((s,i)=>s+itemNet(i),0),sg=arr.reduce((s,i)=>s+itemGST(i),0);html+=`<table class="section-total"><tr><td>Section Basic</td><td class="num">${money(sb)}</td></tr><tr><td>Section GST</td><td class="num">${money(sg)}</td></tr><tr><td>Section Total</td><td class="num">${money(sb+sg)}</td></tr></table>`}
+ });
+ if(items.length===0)html='<div class="section-title">PRODUCTS</div><table class="items-table"><tbody><tr><td class="empty">No products yet. Use the catalogue to add items.</td></tr></tbody></table>';
+ document.getElementById("itemsPreview").innerHTML=html;
+ const globalPct=Math.min(100,Math.max(0,num(val("globalDiscount"))));const globalDisc=basic*globalPct/100;const taxable=Math.max(0,basic-globalDisc);const taxRatio=basic?gst/basic:0;const adjustedGST=gst*(1-globalPct/100);const total=taxable+adjustedGST;
+ document.getElementById("finalTotals").innerHTML=`<tr><td>Total Basic (after item discounts)</td><td class="num">${money(basic)}</td></tr><tr><td>Global Discount ${globalPct?`(${globalPct}%)`:""}</td><td class="num">− ${money(globalDisc)}</td></tr><tr><td>GST</td><td class="num">${money(adjustedGST)}</td></tr><tr><td>Grand Total</td><td class="num">${money(total)}</td></tr>`;
+ document.getElementById("termsPreview").textContent=val("terms")||"—";
+ document.getElementById("pageLabel").textContent=`Preview · ${items.length} item${items.length===1?"":"s"}`;enableCellEditing();
+}
+const FIELD_IDS=["quoteNo","quoteDate","expiryDate","preparedBy","customerName","customerAddress","customerGST","contactPerson","customerMobile","customerEmail","partnerName","bankName","bankBranch","bankAccount","bankIFSC","orderBy","specifications","terms"];
+function computeTotals(){let basic=0,gst=0;items.forEach(i=>{basic+=itemNet(i);gst+=itemGST(i)});const pct=Math.min(100,Math.max(0,num(val("globalDiscount")))),disc=basic*pct/100,g=gst*(1-pct/100);return{basic,disc,pct,gst:g,total:basic-disc+g}}
+function quoteData(){const f={};FIELD_IDS.forEach(id=>f[id]=val(id));return {quoteNo:val("quoteNo"),date:val("quoteDate"),expiry:val("expiryDate"),customer:val("customerName"),address:val("customerAddress"),fields:f,globalDiscount:val("globalDiscount"),items:items.map(i=>({...i})),format:currentFormat,total:computeTotals().total,savedAt:new Date().toISOString()}}
+function saveQuote(){if(!val("customerName").trim()){toast("Please enter the customer name");return}const q=quoteData();let h=readSavedQuotes().filter(x=>x.quoteNo!==q.quoteNo);h.unshift(q);localStorage.setItem("tbhs_quotes",JSON.stringify(h.slice(0,200)));toast("Quotation saved in this browser")}
+function showHistory(){const h=JSON.parse(localStorage.getItem("tbhs_quotes")||"[]");alert(h.length?`Saved test quotations (${h.length}):\n\n`+h.slice(0,15).map(q=>`${q.quoteNo} — ${q.customer} — ${money(q.total)} — ${q.date}`).join("\n"):"No saved quotations in this browser yet. Use Save Test Quote first.")}
+function downloadFile(name,content,type){const blob=new Blob([content],{type});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;a.click();URL.revokeObjectURL(a.href)}
+function exportCSV(){const t=computeTotals();const rows=[["Quotation No",val("quoteNo")],["Customer",val("customerName")],["Date",val("quoteDate")],["Expiry",val("expiryDate")],[],["Section","Item Code","Product","Brand","Model","Size","Qty","Unit","Rate","Discount %","GST %","Net Amount","GST Amount"]];items.forEach(i=>rows.push([i.section,i.code,i.name,i.brand,i.model,i.size,i.qty,i.unit,i.rate,i.discount,i.gst,itemNet(i).toFixed(2),itemGST(i).toFixed(2)]));rows.push([],["Total Basic",t.basic.toFixed(2)],["Global Discount ("+t.pct+"%)",t.disc.toFixed(2)],["GST",t.gst.toFixed(2)],["Grand Total",t.total.toFixed(2)]);downloadFile((val("quoteNo")||"quotation")+".csv","\ufeff"+rows.map(r=>r.map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(",")).join("\r\n"),"text/csv;charset=utf-8")}
+function exportExcel(){if(typeof XLSX==="undefined"){toast("Excel library could not load — check internet connection");return}const t=computeTotals();
+ const rows=[["THE BIG HOTEL STORE — QUOTATION"],[],["Quotation No",val("quoteNo"),"","Date",val("quoteDate")],["Customer",val("customerName"),"","Expiry",val("expiryDate")],["Address",val("customerAddress"),"","GSTIN",val("customerGST")],["Contact",val("contactPerson")+" "+val("customerMobile"),"","Prepared By",val("preparedBy")],[],["Sr","Section","Item Code","Particulars","Brand","Model","Size","Qty","Unit","Rate","Disc %","Net Amount","GST %","GST Amount","Line Total"]];
+ items.forEach((i,n)=>rows.push([n+1,i.section,i.code,i.name,i.brand,i.model,i.size,num(i.qty),i.unit,num(i.rate),num(i.discount),+itemNet(i).toFixed(2),num(i.gst),+itemGST(i).toFixed(2),+(itemNet(i)+itemGST(i)).toFixed(2)]));
+ const L=(a,b)=>{const r=Array(15).fill("");r[10]=a;r[11]=+b.toFixed(2);rows.push(r)};rows.push([]);L("Total Basic",t.basic);L("Global Discount "+t.pct+"%",-t.disc);L("GST",t.gst);L("GRAND TOTAL",t.total);rows.push([],["Terms & Conditions"],[val("terms")]);
+ const ws=XLSX.utils.aoa_to_sheet(rows);ws["!cols"]=[5,14,11,32,14,12,10,6,7,11,8,13,7,12,13].map(w=>({wch:w}));const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,"Quotation");XLSX.writeFile(wb,(val("quoteNo")||"quotation")+".xlsx")}
+function exportPDF(){if(!window.jspdf){toast("PDF library could not load — check internet connection");return}const {jsPDF}=window.jspdf,doc=new jsPDF({unit:"mm",format:LAY.paper||"a4",orientation:isLand()?"landscape":"portrait"}),W=doc.internal.pageSize.getWidth(),t=computeTotals();
+ const rs=n=>"Rs. "+(Number(n)||0).toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2});
+ const H=doc.internal.pageSize.getHeight();
+ let y=pdfTop(doc,W);const spec=LAY.hide.spec?"":val("specifications");if(spec){doc.setFont("helvetica","bold");doc.setFontSize(9*eff("head"));doc.text("Specifications",14,y);const nf=8*eff("notes"),lh=nf*.3528*1.35;doc.setFont("helvetica","normal");doc.setFontSize(nf);const l=doc.splitTextToSize(spec,W-28);doc.text(l,14,y+lh+1.5);y+=lh*l.length+8}
+ pdfItemsTable(doc,y,W);
+ let ty0=doc.lastAutoTable.finalY+6;if(ty0+4*(9*eff("totals")*.3528*1.15+4.4)>H-18){doc.addPage();ty0=20}
+ doc.autoTable({startY:ty0,body:[["Total Basic",rs(t.basic)],["Global Discount ("+t.pct+"%)","- "+rs(t.disc)],["GST",rs(t.gst)],["GRAND TOTAL",rs(t.total)]],theme:"grid",styles:{fontSize:9*eff("totals")},columnStyles:{1:{halign:"right"}},tableWidth:90,margin:{left:W-104,bottom:18},didParseCell:d=>{if(d.row.index===3){d.cell.styles.fillColor=accRGB();d.cell.styles.textColor=255;d.cell.styles.fontStyle="bold"}}});
+ let ty=doc.lastAutoTable.finalY+10;if(ty>doc.internal.pageSize.getHeight()-42){doc.addPage();ty=20}const tn=8*eff("notes"),tlh=tn*.3528*1.35;doc.setFont("helvetica","bold");doc.setFontSize(9*eff("head"));doc.text(termsTxt()?"TERMS & CONDITIONS":"",14,ty);doc.setFont("helvetica","normal");doc.setFontSize(tn);const tl=doc.splitTextToSize(termsTxt(),W-28);let yy=ty+tlh+1.5;tl.forEach(ln=>{if(yy>H-18){doc.addPage();yy=20}doc.text(ln,14,yy);yy+=tlh});
+ const pages=doc.getNumberOfPages();for(let p=1;p<=pages;p++){doc.setPage(p);doc.setDrawColor(200);doc.setLineWidth(.2);doc.line(14,H-14,W-14,H-14);doc.addImage(TBHS_LOGO,"JPEG",14,H-12.5,5.5*TBHS_AR,5.5);doc.setFontSize(7);doc.setTextColor(120);doc.text("www.thebighotelstore.com",14+5.5*TBHS_AR+2,H-8.8);doc.text("Page "+p+" of "+pages,W-14,H-8.8,{align:"right"})}
+ doc.save((val("quoteNo")||"quotation")+".pdf")}
+function exportHistory(){const h=JSON.parse(localStorage.getItem("tbhs_quotes")||"[]");const rows=[["Quotation No","Customer","Date","Expiry","Total","Saved At"],...h.map(q=>[q.quoteNo,q.customer,q.date,q.expiry,q.total,q.savedAt])];downloadFile("tbhs-quotation-history.csv","\ufeff"+rows.map(r=>r.map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(",")).join("\r\n"),"text/csv;charset=utf-8")}
+applySettings();renderCatalogue();renderQuote();
+["quoteNo","quoteDate","expiryDate","preparedBy","customerName","customerAddress","customerGST","contactPerson","customerMobile","customerEmail","partnerName","bankName","bankBranch","bankAccount","bankIFSC","orderBy","specifications","terms"].forEach(id=>document.getElementById(id).addEventListener("input",renderQuote));
+</script>
+<script>
+/* ===== v3: column engine, catalogue import, auto-fit exports ===== */
+const DEFAULT_COLS=[
+{key:"sr",label:"Sr. No.",type:"auto",w:3},{key:"code",label:"Item Code",type:"text",w:10},{key:"qty",label:"Qty",type:"number",w:4,prot:1},{key:"unit",label:"Unit",type:"text",w:4},
+{key:"name",label:"Particulars",type:"text",w:16,prot:1},{key:"type",label:"Type",type:"text",w:6},{key:"image",label:"Image",type:"image",w:7},{key:"brand",label:"Make",type:"text",w:6},{key:"model",label:"Model",type:"text",w:7},
+{key:"sizeL",label:"Size (Length)",type:"text",w:5,internal:1,grp:"size"},{key:"sizeW",label:"Size (Width)",type:"text",w:5,internal:1,grp:"size"},{key:"sizeH",label:"Size (Height)",type:"text",w:5,internal:1,grp:"size"},
+{key:"hw",label:"H.W Rate",type:"number",w:6,fmt:"money",internal:1,grp:"pricing"},
+{key:"incpct",label:"Increased %",type:"number",w:5,fmt:"pct",internal:1,grp:"pricing"},{key:"hwrate",label:"Increased H.W Rate",type:"formula",f:"hw*(1+incpct/100)",w:7,fmt:"money",internal:1,grp:"pricing"},
+{key:"rbd",label:"Rate before Discount",type:"formula",f:"rate-hw+hwrate",w:7,fmt:"money",internal:1,grp:"pricing"},{key:"rate",label:"Rate",type:"number",w:7,fmt:"money",prot:1},
+{key:"discount",label:"Discount",type:"number",w:5,fmt:"pct"},{key:"drate",label:"Discounted Rate",type:"formula",f:"rbd*(1-discount/100)",w:7,fmt:"money"},
+{key:"adddisc",label:"Additional Discount",type:"number",w:6,fmt:"pct",internal:1,grp:"pricing"},{key:"billrate",label:"Billing Rate",type:"formula",f:"drate*(1-adddisc/100)",w:7,fmt:"money",internal:1,grp:"pricing"},
+{key:"amount",label:"Amount",type:"formula",f:"qty*billrate",w:8,fmt:"money",isAmount:1,prot:1},{key:"gst",label:"GST %",type:"number",w:4,fmt:"pctint",prot:1},
+{key:"gstamt",label:"GST Amount",type:"formula",f:"amount*gst/100",w:7,fmt:"money",internal:1,grp:"totals"},{key:"total",label:"Total Amount",type:"formula",f:"amount+gstamt",w:8,fmt:"money",internal:1,grp:"totals"},
+{key:"adddiff",label:"Additional Difference",type:"formula",f:"qty*(drate-billrate)",w:7,fmt:"money",internal:1,grp:"totals"}];
+const clone=o=>JSON.parse(JSON.stringify(o));
+let cols;try{cols=JSON.parse(localStorage.getItem("tbhs_cols3"))}catch(e){}
+if(!Array.isArray(cols)||!cols.length){try{cols=(JSON.parse(localStorage.getItem("tbhs_defaults"))||{}).cols}catch(e){}}
+if(!Array.isArray(cols)||!cols.length)cols=clone(DEFAULT_COLS);
+cols.forEach(c=>{if(c.key==="code"&&c.w===7&&!c._m1){c.w=10;c._m1=1}});
+let showInternal=false,printing=false,uid=0;const showGrp={};let multi=false;
+const saveCols=()=>{try{localStorage.setItem("tbhs_cols3",JSON.stringify(cols))}catch(e){}};
+const FC=new Map(),MATHSET=new Set(["round","min","max","abs","ceil","floor"]);
+function compileF(f){if(FC.has(f))return FC.get(f);let fn=null;try{if(/[^\w\s.+\-*/%(),<>=!&|?:]/.test(f)||/\.\s*[A-Za-z_]/.test(f))throw 0;const s=f.replace(/[A-Za-z_]\w*/g,(m,o,str)=>MATHSET.has(m)&&/^\s*\(/.test(str.slice(o+m.length))?"Math."+m:`V("${m}")`);fn=new Function("V","return ("+s+")")}catch(e){}FC.set(f,fn);return fn}
+function cv(i,key,d=0){const c=cols.find(x=>x.key===key);if(!c||c.type!=="formula")return num(i[key]);if(d>8)return 0;const fn=compileF(c.f||"0");if(!fn)return 0;try{return num(fn(k=>cv(i,k,d+1)))}catch(e){return 0}}
+function itemNet(i){const a=cols.find(c=>c.isAmount);return a?cv(i,a.key):num(i.qty)*num(i.rate)*(1-num(i.discount)/100)}
+function itemGST(i){return itemNet(i)*num(i.gst)/100}
+const outCols=pdf=>cols.filter(c=>!c.hidden&&(pdf?!c.internal:(!c.internal||showInternal||showGrp[c.grp||"other"])));
+function cellVal(i,c,idx){if(c.type==="auto")return idx+1;if(c.type==="image")return i.image?"[image]":"";if(c.type==="formula")return +cv(i,c.key).toFixed(2);return c.type==="number"?num(i[c.key]):(i[c.key]??"")}
+function fmtVal(v,c){if(c.type==="text"||c.type==="auto"||v==="")return String(v);if(c.fmt==="pct")return (+v).toFixed(1)+"%";if(c.fmt==="pctint")return v+"%";if(c.fmt==="money"||c.type==="formula")return (+v).toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2});return String(v)}
+const _rq=renderQuote;
+renderQuote=function(){_rq();const C=outCols(printing),land=isLand(),tw=C.reduce((s,c)=>s+c.w,0),fb=Math.max(6,9-Math.max(0,C.length-9)*.4),fs=fb*eff("body"),fh=fb*eff("thead");let html="";
+ if(!items.length)html='<div class="section-title">PRODUCTS</div><table class="items-table"><tbody><tr><td class="empty">No products yet. Use the catalogue to add items.</td></tr></tbody></table>';
+ Object.entries(groupedItems()).forEach(([sec,arr],gi)=>{html+=`<div class="section-title">${currentFormat==="classic"?"ITEMS":(gi+1)+". "+esc(sec.toUpperCase())}</div><div class="tbl-scroll"><table class="items-table" style="font-size:${fs}px;--th:${fh}px;min-width:${printing?0:Math.round(tw*7.5)}px"><colgroup>${C.map(c=>`<col style="width:${(c.w/tw*(printing?100:96)).toFixed(2)}%">`).join("")}${printing?"":'<col style="width:4%">'}</colgroup><thead><tr>${C.map(c=>`<th class="${c.internal?"icol":""}">${esc(c.label)}</th>`).join("")}${printing?"":"<th></th>"}</tr></thead><tbody>`;
+  arr.forEach(i=>{const ix=items.indexOf(i);html+=`<tr data-item-id="${i.id}">${C.map(c=>{if(c.type==="image")return `<td class="img-cell ${c.internal?"icol":""}" data-img="${i.id}">${i.image?`<img src="${i.image}" alt=""><span class="img-x no-print" title="Remove image" onclick="event.stopPropagation();delImg(${i.id})">×</span>`:'<span class="img-add no-print">＋ Drop / click</span>'}</td>`;const tx=c.type==="text"||c.type==="auto";return `<td class="${tx?"":"num"} ${c.internal?"icol":""}" ${c.type==="text"||c.type==="number"?`data-field="${c.key}"`:""}>${esc(fmtVal(cellVal(i,c,ix),c))}</td>`}).join("")}${printing?"":`<td class="editor-table-actions"><button class="cell-btn" title="Add line below" onclick="addLineBelow(${i.id})">+</button><button class="cell-btn" title="Remove line" onclick="removeLine(${i.id})">−</button></td>`}</tr>`});
+  html+="</tbody></table></div>";if(currentFormat==="section"){const sb=arr.reduce((s,i)=>s+itemNet(i),0),sg=arr.reduce((s,i)=>s+itemGST(i),0);html+=`<table class="section-total"><tr><td>Section Basic</td><td class="num">${money(sb)}</td></tr><tr><td>Section GST</td><td class="num">${money(sg)}</td></tr><tr><td>Section Total</td><td class="num">${money(sb+sg)}</td></tr></table>`}});
+ document.getElementById("itemsPreview").innerHTML=html;
+ let st=document.getElementById("pgStyle");if(!st){st=document.createElement("style");st.id="pgStyle";document.head.appendChild(st)}st.textContent=`@page{size:A4 ${land?"landscape":"portrait"};margin:0}`;enableCellEditing()};
+window.onbeforeprint=()=>{printing=true;renderQuote()};window.onafterprint=()=>{printing=false;renderQuote()};
+function enableCellEditing(){const t=document.getElementById("itemsPreview");t.ondblclick=e=>{const td=e.target.closest("td[data-field]");if(!td||td.isContentEditable)return;const it=items.find(x=>String(x.id)===td.closest("tr").dataset.itemId);if(!it)return;const f=td.dataset.field,c=cols.find(x=>x.key===f),orig=it[f];td.contentEditable="true";td.textContent=orig??"";td.focus();td.onblur=()=>{td.contentEditable="false";let v=td.textContent.trim();if(c&&c.type==="number"){v=Number(v.replace(/[₹,%\s,]/g,""));if(!Number.isFinite(v))v=orig}it[f]=v;renderQuote()};td.onkeydown=ev=>{if(ev.key==="Enter"){ev.preventDefault();td.blur()}if(ev.key==="Escape"){td.onblur=null;renderQuote()}}}}
+/* column manager */
+function toggleInternal(){showInternal=!showInternal;document.getElementById("intBtn").classList.toggle("primary",showInternal);renderQuote()}
+function openCols(){renderColDlg();document.getElementById("colDlg").showModal()}
+function renderColDlg(){document.getElementById("colList").innerHTML=cols.map((c,i)=>`<div class="crow"><input value="${esc(c.label)}" onchange="colSet(${i},'label',this.value)"><select ${c.prot||c.type==="auto"||c.type==="image"?"disabled":""} onchange="colSet(${i},'type',this.value)">${["text","number","formula"].map(t=>`<option ${c.type===t?"selected":""}>${t}</option>`).join("")}${c.type==="auto"||c.type==="image"?`<option selected>${c.type}</option>`:""}</select>${c.type==="formula"?`<input value="${esc(c.f)}" title="Formula, e.g. qty*rate*(1-discount/100)" onchange="colSet(${i},'f',this.value)">`:"<span></span>"}<input type="number" min="2" max="40" value="${c.w}" title="Width weight" onchange="colSet(${i},'w',+this.value)"><label title="Internal = shown on screen only (👁 button). Never in PDF/print."><input type="checkbox" ${c.internal?"checked":""} onchange="colSet(${i},'internal',this.checked)"> internal</label><label><input type="checkbox" ${c.hidden?"checked":""} onchange="colSet(${i},'hidden',this.checked)"> hide</label><span><button onclick="colMove(${i},-1)">↑</button><button onclick="colMove(${i},1)">↓</button><button title="Insert column below" onclick="colAdd(${i})">＋</button>${c.prot?"":`<button onclick="colDel(${i})">✕</button>`}</span><small>key for formulas: <b>${c.key}</b></small></div>`).join("")}
+function colUpd(){saveCols();renderQuote();renderColDlg()}
+function colSet(i,p,v){cols[i][p]=v;if(p==="type"&&v==="formula"&&!cols[i].f)cols[i].f="qty*rate";if(p==="f"&&!compileF(v))toast("Formula not valid — use column keys, + − * / ( )");colUpd()}
+function colMove(i,d){const j=i+d;if(j<0||j>=cols.length)return;[cols[i],cols[j]]=[cols[j],cols[i]];colUpd()}
+function colAdd(i){const n=prompt("New column name?");if(!n)return;let k=n.toLowerCase().replace(/[^a-z0-9]/g,"");if(!k||/^\d/.test(k)||MATHSET.has(k))k="c"+k;const b=k;let x=2;while(cols.some(c=>c.key===k))k=b+x++;cols.splice(i+1,0,{key:k,label:n,type:"text",w:8});colUpd()}
+function colDel(i){cols.splice(i,1);colUpd()}
+function colReset(){if(confirm("Reset columns to default?")){cols=clone(DEFAULT_COLS);colUpd()}}
+/* exports driven by columns */
+function bodyRows(C){const r=[];Object.entries(groupedItems()).forEach(([sec,arr])=>{if(currentFormat!=="classic")r.push([sec.toUpperCase()]);arr.forEach(i=>r.push(C.map(c=>cellVal(i,c,items.indexOf(i)))))});return r}
+function totalRows(C,nC){const t=computeTotals(),a=Math.max(0,C.findIndex(c=>c.isAmount)),r=[];[["Total Basic",t.basic],["Global Discount "+t.pct+"%",-t.disc],["GST",t.gst],["GRAND TOTAL",t.total]].forEach(([l,v])=>{const x=Array(nC).fill("");x[Math.max(0,a-1)]=l;x[a]=+v.toFixed(2);r.push(x)});return r}
+function exportExcel(){if(typeof XLSX==="undefined"){toast("Excel library could not load — check internet connection");return}const C=outCols(false),n=C.length;
+ const rows=[["THE BIG HOTEL STORE — QUOTATION"],[],["Quotation No",val("quoteNo"),"","Date",val("quoteDate")],["Customer",val("customerName"),"","Expiry",val("expiryDate")],["Address",val("customerAddress"),"","GSTIN",val("customerGST")],[],C.map(c=>c.label),...bodyRows(C),[],...totalRows(C,n),[],["Terms & Conditions"],[val("terms")]];
+ const ws=XLSX.utils.aoa_to_sheet(rows);ws["!cols"]=C.map(c=>({wch:Math.max(8,c.w*1.6)}));const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,"Quotation");XLSX.writeFile(wb,(val("quoteNo")||"quotation")+".xlsx")}
+function exportCSV(){const C=outCols(false),rows=[["Quotation No",val("quoteNo")],["Customer",val("customerName")],["Date",val("quoteDate")],[],C.map(c=>c.label),...bodyRows(C),[],...totalRows(C,C.length)];downloadFile((val("quoteNo")||"quotation")+".csv","\ufeff"+rows.map(r=>r.map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(",")).join("\r\n"),"text/csv;charset=utf-8")}
+function pdfItemsTable(doc,y,W){const C=outCols(true),us=W-28,tw=C.reduce((s,c)=>s+c.w,0),fb=Math.max(5.5,8-Math.max(0,C.length-8)*.35),fs=fb*eff("body"),fh=fb*eff("thead"),cs={};C.forEach((c,k)=>cs[k]={cellWidth:c.w/tw*us,halign:c.type==="text"||c.type==="auto"?"left":"right"});const body=[];
+ Object.entries(groupedItems()).forEach(([sec,arr])=>{if(currentFormat!=="classic")body.push([{content:sec.toUpperCase(),colSpan:C.length,styles:{fillColor:[240,227,226],textColor:[100,29,37],fontStyle:"bold",halign:"left"}}]);arr.forEach(i=>body.push(C.map(c=>c.type==="image"?{content:"",styles:{minCellHeight:i.image?12:0},_img:i.image||""}:pdfCell(fmtVal(cellVal(i,c,items.indexOf(i)),c),c,i,fs))))});
+ doc.autoTable({startY:y,head:[C.map(c=>c.label)],body,theme:"grid",styles:{fontSize:fs,cellPadding:1.5,overflow:"linebreak"},headStyles:{fillColor:accRGB(),halign:"center",fontSize:fh},didParseCell:d=>{if(d.section==="head"){const st=C[d.column.index]&&C[d.column.index].sth;if(st){if(st.size)d.cell.styles.fontSize=fh*st.size/100;if(st.color)d.cell.styles.textColor=hex2rgb(st.color);if(st.bold)d.cell.styles.fontStyle="bold"}}},columnStyles:cs,margin:{left:14,right:14,bottom:18},didDrawCell:d=>{const im=d.section==="body"&&d.cell.raw&&d.cell.raw._img;if(im){try{const pr=doc.getImageProperties(im),w=d.cell.width-2,h=d.cell.height-2,r=Math.min(w/pr.width,h/pr.height);doc.addImage(im,"JPEG",d.cell.x+1,d.cell.y+1,pr.width*r,pr.height*r)}catch(e){}}}})}
+/* unified catalogue */
+const FIELDS=["code","discount","rate","gst","brand","model","size","unit","category","name"],SYN={code:["code","sku","art no","article no","part no"],discount:["disc"],rate:["rate","price","mrp","basic"],gst:["gst","tax"],brand:["brand","make"],model:["model"],size:["size","capacity","dimension"],unit:["unit","uom"],category:["category","group","type","section"],name:["product","item","description","particular","article","name"]};
+function findHeader(rows){let best=null;rows.slice(0,20).forEach((r,ri)=>{const map={};r.forEach((h,ci)=>{const t=String(h).toLowerCase();if(!t)return;const f=FIELDS.find(k=>map[k]===undefined&&SYN[k].some(s=>t.includes(s))&&(k!=="discount"||!/rate|price|amount/.test(t)));if(f)map[f]=ci});const n=Object.keys(map).length;if(map.name!==undefined&&n>=2&&(!best||n>best.n))best={row:ri,map,n}});return best}
+const saveCatalogue=()=>{try{localStorage.setItem("tbhs_catalogue",JSON.stringify(catalogue))}catch(e){toast("Browser storage is full — catalogue too large for local storage")}};
+const ckey=p=>[p.brand,p.code,p.name,p.model].join("|").toLowerCase();
+const brandDisc=b=>num((catalogue.find(p=>(p.brand||"—")===b)||{}).discount);
+function setBrandDisc(b,v){catalogue.forEach(p=>{if((p.brand||"—")===b)p.discount=num(v)});saveCatalogue();toast(b+": discount set to "+num(v)+"%")}
+async function runImport(){if(typeof XLSX==="undefined"){toast("Excel library not loaded");return}const files=[...document.getElementById("impFiles").files];if(!files.length){toast("Choose at least one file");return}
+ const ov=val("impBrand").trim(),dd=num(val("impDisc")),dg=num(val("impGst"));if(val("impMode")==="replace")catalogue=[];const idx=new Map(catalogue.map(p=>[ckey(p),p]));let add=0,upd=0,skip=0;
+ for(const f of files){let wb;try{wb=XLSX.read(await f.arrayBuffer(),{type:"array"})}catch(e){skip++;continue}
+  for(const sn of wb.SheetNames){const rows=XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,defval:"",raw:false}),hm=findHeader(rows);if(!hm)continue;const base=ov||(wb.SheetNames.length>1?sn:f.name.replace(/\.[^.]+$/,""));
+   for(let r=hm.row+1;r<rows.length;r++){const row=rows[r],g=k=>hm.map[k]===undefined?"":String(row[hm.map[k]]).trim(),name=g("name");if(!name){skip++;continue}const brand=g("brand")||base;
+    const p={name,brand,code:g("code"),model:g("model"),size:g("size"),unit:g("unit")||"PCS",rate:num(g("rate").replace(/[,₹\s]/g,"")),category:g("category")||"General",discount:g("discount")===""?(brandDisc(brand)||dd):num(g("discount").replace("%","")),gst:g("gst")===""?dg:num(g("gst").replace("%",""))};
+    const k=ckey(p),ex=idx.get(k);if(ex){Object.assign(ex,p);upd++}else{p.id=Date.now()+(++uid);catalogue.push(p);idx.set(k,p);add++}}}}
+ saveCatalogue();renderCatalogue();showAppPage("Product Catalogue");toast(`Imported: ${add} new, ${upd} updated, ${skip} rows skipped`)}
+function downloadTemplate(){XLSX.writeFile((()=>{const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([["Brand","Item Code","Product","Model","Size","Unit","Rate","Discount %","GST %"],["ARIANE","APRARN0000430","Coffee Cup Stackable 20CL","","20 cl","PCS",144,40,5]]),"Price List");return wb})(),"TBHS-pricelist-template.xlsx")}
+function clearCatalogue(){if(confirm("Delete ALL products from the catalogue?")){catalogue=[];saveCatalogue();renderCatalogue();showAppPage("Product Catalogue")}}
+let catBrand="",catQ="";
+function drawCatTable(){const q=catQ.toLowerCase(),L=catalogue.filter(p=>(!catBrand||(p.brand||"—")===catBrand)&&(!q||[p.name,p.brand,p.code,p.model].join(" ").toLowerCase().includes(q)));document.getElementById("catTable").innerHTML=pageTable(["Product","Brand","Code","Model","Size","Rate","Disc %","GST %",""],L.slice(0,150).map(p=>[`<b>${esc(p.name)}</b>`,esc(p.brand||"—"),esc(p.code||"—"),esc(p.model||"—"),esc(p.size||"—"),money(p.rate),num(p.discount)+"%",num(p.gst)+"%",`<button onclick="addProductFromPage(${p.id})">Add to quotation</button>`]),"No products. Import a price list above.")+(L.length>150?`<p class="muted">Showing 150 of ${L.length}. Use search to narrow.</p>`:"")}
+function renderCataloguePage(){const br=[...new Set(catalogue.map(p=>p.brand||"—"))].sort();
+ return `<section class="page-panel"><h2>Import price lists <span class="muted">· ${catalogue.length} products · ${br.length} brands</span></h2><p class="muted">Upload all your brand sheets (Excel/CSV) together. Columns are detected automatically (code, product, brand/make, model, size, unit, rate/price, discount, GST) and merged into this one catalogue.</p><div class="page-form"><label>Brand name (only if file has no Brand column)<input id="impBrand" placeholder="Blank = file / sheet name"></label><label>Default discount % (for brands without one)<input id="impDisc" type="number" value="0"></label><label>Default GST %<input id="impGst" type="number" value="18"></label><label>Mode<select id="impMode"><option value="merge">Merge (update same items)</option><option value="replace">Replace entire catalogue</option></select></label><label class="wide">Price list files<input id="impFiles" type="file" multiple accept=".xlsx,.xls,.csv"></label><div class="wide page-toolbar"><button class="btn primary" onclick="runImport()">Import</button><button class="btn" onclick="downloadTemplate()">Download blank template</button></div></div></section>
+ <section class="page-panel"><h2>Brand discounts</h2><p class="muted">Change a brand's discount once and all its products update.</p><div class="page-form">${br.map(b=>`<label>${esc(b)}<input type="number" data-b="${esc(b)}" value="${brandDisc(b)}" onchange="setBrandDisc(this.dataset.b,this.value)"></label>`).join("")||'<span class="muted">No brands yet.</span>'}</div></section>
+ <section class="page-panel"><h2>Products</h2><div class="page-toolbar"><input placeholder="Search product, brand, code, model..." oninput="catQ=this.value;drawCatTable()"><select onchange="catBrand=this.value;drawCatTable()"><option value="">All brands</option>${br.map(b=>`<option>${esc(b)}</option>`).join("")}</select><button class="btn" onclick="clearCatalogue()">Clear catalogue</button></div><div id="catTable"></div></section>`}
+const _sp=showAppPage;showAppPage=function(p){_sp(p);if(p==="Product Catalogue")drawCatTable()};
+function addProduct(p){const sec=(document.getElementById("addSection").value||"").trim()||p.category||"General";items.push({id:Date.now()+Math.random(),section:sec,code:p.code||"",name:p.name||"New product",brand:p.brand||"",model:p.model||"",type:p.type||p.category||"",...sizeParts(p.size),qty:1,unit:p.unit||"PCS",rate:num(p.rate),discount:num(p.discount),gst:p.gst===undefined||p.gst===""?num(val("defaultGST")):num(p.gst)});renderQuote();toast("Added: "+(p.name||"item"))}
+function renderCatalogue(){const q=val("productSearch").toLowerCase().trim(),L=catalogue.filter(p=>!q||[p.name,p.brand,p.code,p.model,p.category].join(" ").toLowerCase().includes(q));document.getElementById("catalogCount").textContent=catalogue.length+" items";document.getElementById("catalogueList").innerHTML=L.slice(0,40).map(p=>`<div class="catalogue-item"><div><b>${esc(p.name)}</b><small>${esc(p.brand)} · ${esc(p.code)} · ${money(p.rate)} · ${num(p.discount)}% off</small></div><button class="btn small" onclick="addFromCatalogue(${p.id})">+ Add</button></div>`).join("")+(L.length>40?`<p class="mini-note">Showing 40 of ${L.length} — type to narrow.</p>`:"")||'<p class="mini-note">No matching products.</p>'}
+
+renderCatalogue();
+</script>
+<script>
+/* ===== v4: full-page studio ===== */
+function setFormat(f){currentFormat=f;document.body.className="format-"+f;const sel=document.getElementById("formatSelect");if(sel)sel.value=f;renderQuote()}
+const FACTORY_SZ={master:1.25,company:1,head:1,text:1,notes:1,thead:1,body:1,totals:1};
+const FACTORY={accent:"#641d25",tscale:1,orient:"landscape",paper:"a4",hide:{},sz:FACTORY_SZ};
+let LAY=Object.assign(JSON.parse(JSON.stringify(FACTORY)),(()=>{try{return JSON.parse(localStorage.getItem("tbhs_layout2"))||(JSON.parse(localStorage.getItem("tbhs_defaults"))||{}).lay||{}}catch(e){return{}}})());LAY.hide=LAY.hide||{};LAY.sz=Object.assign({},FACTORY_SZ,LAY.sz||{});const eff=k=>(LAY.sz.master||1)*(LAY.sz[k]||1);
+const HIDE={head:1,ribbon:1,parties:1,spec:1,terms:1,sign:1,foot:1};
+const isLand=()=>LAY.orient==="auto"?outCols(true).length>8:LAY.orient==="landscape";
+const accRGB=()=>[1,3,5].map(i=>parseInt(LAY.accent.substr(i,2),16)||0);
+const termsTxt=()=>LAY.hide.terms?"":val("terms");
+const layStore=()=>{try{localStorage.setItem("tbhs_layout2",JSON.stringify(LAY))}catch(e){}};
+function applyLay(){const p=document.getElementById("paper");p.style.setProperty("--maroon",LAY.accent);p.style.setProperty("--red","color-mix(in srgb,"+LAY.accent+" 85%,#fff)");Object.keys(HIDE).forEach(k=>p.classList.toggle("hide-"+k,!!LAY.hide[k]))}
+function laySet(k,v){LAY[k]=v;layStore();renderQuote()}
+function layHide(k,h){LAY.hide[k]=h;layStore();renderQuote()}
+let curTab="details";
+function panelTab(t){curTab=t;document.querySelectorAll(".ptabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));document.querySelectorAll(".editor>section.panel").forEach(s=>s.style.display=s.dataset.tab===t?"":"none")}
+function openPanel(t){document.getElementById("appRoot").classList.remove("panel-closed");panelTab(t)}
+function togglePanel(){document.getElementById("appRoot").classList.toggle("panel-closed");sizeBar()}
+const sizeBar=()=>{const b=document.querySelector(".topbar");if(b)document.documentElement.style.setProperty("--tb",b.offsetHeight+"px")};addEventListener("resize",sizeBar);
+function updStudioBar(){const t=document.getElementById("studioTitle");if(!t)return;t.textContent=(val("quoteNo")||"Quotation")+" · "+(val("customerName")||"Customer");document.querySelectorAll("#fmtSwitch button").forEach(b=>b.classList.toggle("on",b.dataset.f===currentFormat));sizeBar()}
+const _rq2=renderQuote;renderQuote=function(){_rq2();applyLay();updStudioBar()};
+function enableStudioEditing(){document.getElementById("paper").ondblclick=e=>{if(e.target.closest("#itemsPreview"))return;for(const [sel,id,tab] of [[".paper-head","companyAddr","details"],["#metaPreview","quoteNo","details"],["#billPreview","customerName","details"],["#partnerPreview","partnerName","details"],["#specPreview","specifications","details"],["#termsPreview","terms","layout"]]){if(e.target.closest(sel)){openPanel(tab);const el=document.getElementById(id);el.scrollIntoView({block:"center"});el.focus();return}}}}
+function startCreate(){setFormat(landingFormat);["navPage","landingPage"].forEach(id=>document.getElementById(id).style.display="none");const app=document.getElementById("appRoot");app.classList.remove("editing","full-quote");app.classList.add("studio");document.querySelector(".editor").style.display="block";document.querySelector(".workspace").style.display="block";panelTab(curTab);enableStudioEditing();sizeBar();window.scrollTo(0,0)}
+const _bf=backToFormats;backToFormats=function(){document.getElementById("appRoot").classList.remove("studio");_bf()};
+const _sp2=showAppPage;showAppPage=function(p){if(p!=="Create Quotation")document.getElementById("appRoot").classList.remove("studio");_sp2(p)};
+(function(){const a=document.querySelector(".editor");
+ a.insertAdjacentHTML("afterbegin",'<div class="ptabs"><button data-t="details" onclick="panelTab(\'details\')">📝 Details</button><button data-t="products" onclick="panelTab(\'products\')">📦 Products</button><button data-t="layout" onclick="panelTab(\'layout\')">🎨 Layout</button></div>');
+ a.querySelectorAll(":scope>section.panel").forEach(s=>s.dataset.tab=s.id==="catalogPanel"?"products":(s.id==="layoutPanel"||s.querySelector("#formatSelect"))?"layout":"details");
+ document.getElementById("layAccent").value=LAY.accent;document.getElementById("layOrient").value=LAY.orient;document.getElementById("layPaper").value=LAY.paper||"a4";
+ document.querySelectorAll("#layoutPanel [data-k]").forEach(c=>c.checked=!LAY.hide[c.dataset.k]);panelTab("details")})();
+renderQuote();
+</script>
+<script>
+/* ===== v5: 25-column layout, images, landscape ===== */
+const sizeParts=z=>{z=String(z||"");const p=/[x×*]/i.test(z)?z.split(/\s*[x×*]\s*/i):[z];return{sizeL:p[0]||"",sizeW:p[1]||"",sizeH:p[2]||""}};
+const migrate=()=>items.forEach(i=>{if(i.size&&i.sizeL===undefined)Object.assign(i,sizeParts(i.size))});
+function pickImage(id){const inp=document.createElement("input");inp.type="file";inp.accept="image/*";inp.onchange=()=>{const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,200/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.max(1,Math.round(im.width*k));c.height=Math.max(1,Math.round(im.height*k));const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);const it=items.find(z=>String(z.id)===String(id));if(it){it.image=c.toDataURL("image/jpeg",.8);renderQuote()}};im.src=r.result};r.readAsDataURL(f)};inp.click()}
+function delImg(id){const it=items.find(z=>String(z.id)===String(id));if(it){it.image="";renderQuote()}}
+const _ece=enableCellEditing;enableCellEditing=function(){_ece();const t=document.getElementById("itemsPreview"),prev=t.ondblclick;t.ondblclick=e=>{const td=e.target.closest("td[data-img]");if(td){pickImage(td.dataset.img);return}prev&&prev(e)};t.onclick=e=>{if(e.target.closest(".img-x"))return;const a=e.target.closest(".img-add");if(a){pickImage(a.closest("td").dataset.img);return}const f=e.target.closest("td[data-field]");if(f&&!f.isContentEditable&&!(e.ctrlKey||e.metaKey||e.shiftKey||multi)&&t.ondblclick)t.ondblclick(e)}};
+const _al=applyLay;applyLay=function(){_al();document.getElementById("paper").classList.toggle("land",isLand())};
+const _rq3=renderQuote;renderQuote=function(){migrate();_rq3()};
+migrate();renderQuote();
+</script>
+<script>
+/* ===== v6: clean editing view (column groups) ===== */
+const GRP={size:"Sizes",pricing:"Rate workings",totals:"GST / totals / difference",other:"Other internal"};
+cols.forEach(c=>{if(c.internal&&!c.grp)c.grp="other"});
+function toggleGrp(g){if(showInternal){showInternal=false;document.getElementById("intBtn").classList.remove("primary");Object.keys(GRP).forEach(k=>showGrp[k]=k!==g)}else showGrp[g]=!showGrp[g];renderQuote()}
+function addBlank(){const last=items.length?items[items.length-1].section:"General";items.push({id:Date.now()+Math.random(),section:last,code:"",name:"New product",brand:"",model:"",type:"",sizeL:"",sizeW:"",sizeH:"",qty:1,unit:"PCS",rate:0,discount:0,gst:num(val("defaultGST"))});renderQuote()}
+function drawChips(){const el=document.getElementById("colChips");if(!el)return;const g=Object.keys(GRP).filter(k=>cols.some(c=>c.internal&&!c.hidden&&(c.grp||"other")===k));el.innerHTML='<b>Editing view</b><span class="chip on" style="background:#fff;border-color:var(--line);color:var(--ink);cursor:default">Customer columns</span>'+g.map(k=>{const on=showGrp[k]||showInternal,n=cols.filter(c=>c.internal&&!c.hidden&&(c.grp||"other")===k).length;return `<button class="chip ${on?"on":""}" onclick="toggleGrp('${k}')">${on?"✓":"＋"} ${GRP[k]} (${n})</button>`}).join("")+'<small style="color:var(--muted)">Blue-grey = internal, never printed in the PDF</small><button class="chip ${multi?"on":""}" onclick="toggleMulti()" title="Click headers or cells to add them to the selection. Ctrl or Shift + click also works.">${multi?"☑":"☐"} Multi-select</button><button class="chip" onclick="selectAllCols()">Select all columns</button><span style="flex:1"></span><button class="chip add" onclick="addBlank()">＋ Add line</button>'}
+const _rq4=renderQuote;renderQuote=function(){_rq4();drawChips()};
+renderQuote();
+</script>
+<script>
+const TBHS_LOGO="data:image/jpeg;base64,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",TBHS_AR=278/270;
+document.querySelectorAll(".logo-img").forEach(i=>i.src=TBHS_LOGO);
+</script>
+<script>
+/* ===== v8: text sizes, cell/column styling, drag&drop images, labelled bill-to ===== */
+const hex2rgb=h=>[1,3,5].map(i=>parseInt(String(h).substr(i,2),16)||0);
+function pdfTop(doc,W){const ink=[48,40,42],CW=W-28,land=W>doc.internal.pageSize.getHeight();let y=8;
+ if(!LAY.hide.head){const lh=22,lw=lh*TBHS_AR,gw=land?CW*.9:CW,gx=14+(CW-gw)/2,x0=gx+lw+5,av=gw-lw-5,nm="THE BIG HOTEL STORE",tg="HOTELWARE · KITCHEN EQUIPMENT · HOSPITALITY SOLUTIONS";
+  doc.addImage(TBHS_LOGO,"JPEG",gx,6,lw,lh);doc.setFont("helvetica","bold");doc.setFontSize(10);const w10=doc.getTextWidth(nm);
+  const fz=Math.min(60,av/w10*10)*Math.min(1,eff("company"));doc.setFontSize(fz);const nw=doc.getTextWidth(nm);
+  doc.setTextColor(...accRGB());doc.text(nm,x0,6+lh*.55,{charSpace:Math.max(0,(av-nw)/(nm.length-1))});
+  const cl=coLine();if(cl){doc.setFont("helvetica","normal");doc.setFontSize(10);const c10=doc.getTextWidth(cl),cz=Math.min(9*Math.max(.7,eff("company")),av/c10*10);doc.setFontSize(cz);doc.setTextColor(80);doc.text(cl,x0+av/2,6+lh*.92,{align:"center"})}
+  if(!LAY.hide.ribbon){doc.setFillColor(...accRGB());doc.rect(14,lh+9,CW,7,"F");doc.setFont("helvetica","bold");doc.setFontSize(8*Math.max(.8,eff("head")));doc.setTextColor(255);doc.text(tg,W/2,lh+9+4.7,{align:"center",charSpace:.5});y=lh+16}
+  else{doc.setDrawColor(...accRGB());doc.setLineWidth(.9);doc.line(14,lh+10,W-14,lh+10);y=lh+10}}
+ y+=6;const fz=9*eff("text"),lh2=fz*.3528*1.55,fh=9*eff("head"),bw=(CW-6)/2,pad=3.5,hh=fh*.3528*2.2;doc.setFontSize(fz);
+ const rowsL=[["Quotation No",val("quoteNo")],["Date",val("quoteDate")],["Valid Until",val("expiryDate")],["Customer Name",val("customerName")],["Address",val("customerAddress")],["GSTIN",val("customerGST")],["Contact",(val("contactPerson")+" "+val("customerMobile")).trim()],["Email",val("customerEmail")]];
+ const rowsR=[["Partner Name",val("partnerName")],["Bank",val("bankName")],["Branch",val("bankBranch")],["A/C No",val("bankAccount")],["IFSC",val("bankIFSC")],["Order By",val("orderBy")],["Prepared By",val("preparedBy")]];
+ const mk=rows=>{doc.setFont("helvetica","bold");const lw=Math.max(...rows.map(r=>doc.getTextWidth(r[0])))+2;doc.setFont("helvetica","normal");const out=rows.map(r=>({l:r[0],t:doc.splitTextToSize(String(r[1]||""),bw-2*pad-lw-4)}));return{lw,out,h:out.reduce((s,o)=>s+Math.max(1,o.t.length)*lh2,0)}};
+ const L=mk(rowsL),R=mk(rowsR),bh=pad*2+hh+Math.max(L.h,R.h);
+ const draw=(x,title,B)=>{doc.setDrawColor(205,175,178);doc.setLineWidth(.3);doc.roundedRect(x,y,bw,bh,1.5,1.5);doc.setFont("helvetica","bold");doc.setFontSize(fh);doc.setTextColor(...accRGB());doc.text(title,x+pad,y+pad+fh*.3528);doc.setDrawColor(...accRGB());doc.setLineWidth(.4);doc.line(x+pad,y+pad+hh-1,x+bw-pad,y+pad+hh-1);doc.setFontSize(fz);doc.setTextColor(...ink);let yy=y+pad+hh+fz*.3528;B.out.forEach(o=>{doc.setFont("helvetica","bold");doc.text(o.l,x+pad,yy);doc.text(":",x+pad+B.lw+1,yy);doc.setFont("helvetica","normal");(o.t.length?o.t:[""]).forEach(l=>{doc.text(l,x+pad+B.lw+4,yy);yy+=lh2})})};
+ draw(14,"BILLING DETAILS",L);draw(14+bw+6,"BILLING PARTNER",R);doc.setTextColor(...ink);return y+bh+6}
+function pdfCell(v,c,i,fs){const st=Object.assign({},c.st,i.cs&&i.cs[c.key]);if(!st.size&&!st.color&&!st.bold)return v;const s={};if(st.size)s.fontSize=fs*st.size/100;if(st.color)s.textColor=hex2rgb(st.color);if(st.bold)s.fontStyle="bold";return{content:v,styles:s}}
+/* sizes */
+const SZ=[["master","All text (master)"],["company","Company heading"],["head","Section headings"],["text","Customer / partner / meta"],["notes","Specification & terms"],["thead","Table headers"],["body","Product rows"],["totals","Totals"]];
+function drawSz(){document.getElementById("szBox").innerHTML=SZ.map(([k,l])=>`<div class="szrow ${k==="master"?"szm":""}"><span>${l}</span><input type="range" min="50" max="200" step="5" value="${Math.round(LAY.sz[k]*100)}" oninput="szSet('${k}',this.value,this)"><output>${Math.round(LAY.sz[k]*100)}%</output></div>`).join("")+'<button class="btn" onclick="szReset()">Reset sizes</button>'}
+function szSet(k,v,el){LAY.sz[k]=v/100;layStore();el.nextElementSibling.textContent=v+"%";renderQuote()}
+function szReset(){Object.assign(LAY.sz,FACTORY_SZ);layStore();drawSz();renderQuote()}
+/* column / cell styling (multi-select) */
+let sel=null;const colOf=k=>cols.find(c=>c.key===k),itOf=id=>items.find(x=>String(x.id)===String(id)),scopeKey=()=>document.getElementById("fmtScope").value==="head"?"sth":"st";
+function selList(){return!sel?[]:sel.t==="col"?sel.keys.map(k=>({o:colOf(k)})).filter(x=>x.o):sel.cells.map(c=>({o:itOf(c.id),k:c.key})).filter(x=>x.o)}
+function getSt(){const L=selList();if(!L.length)return{};const x=L[0];return sel.t==="cell"?((x.o.cs&&x.o.cs[x.k])||{}):(x.o[scopeKey()]||{})}
+function stSet(p,v){selList().forEach(x=>{if(sel.t==="cell"){x.o.cs=x.o.cs||{};x.o.cs[x.k]=Object.assign(x.o.cs[x.k]||{},{[p]:v})}else x.o[scopeKey()]=Object.assign(x.o[scopeKey()]||{},{[p]:v})});if(sel&&sel.t==="col")saveCols();renderQuote()}
+function stStep(d){if(!selList().length)return;stSet("size",Math.max(50,Math.min(300,(getSt().size||100)+d)));updFmtBar()}
+function stClear(){selList().forEach(x=>{if(sel.t==="cell"){if(x.o.cs)delete x.o.cs[x.k]}else delete x.o[scopeKey()]});if(sel&&sel.t==="col")saveCols();renderQuote();updFmtBar()}
+function pickCol(key,e){const C=outCols(printing).map(c=>c.key);if(e.shiftKey&&sel&&sel.t==="col"&&sel.keys.length){const a=C.indexOf(sel.keys[sel.keys.length-1]),b=C.indexOf(key),r=C.slice(Math.min(a,b),Math.max(a,b)+1);sel.keys=[...new Set([...sel.keys,...r])]}else if((e.ctrlKey||e.metaKey||multi)&&sel&&sel.t==="col"){const k=sel.keys.indexOf(key);if(k>=0)sel.keys.splice(k,1);else sel.keys.push(key);if(!sel.keys.length)sel=null}else sel={t:"col",keys:[key]};updFmtBar();paintSel()}
+function pickCell(key,id,e){if((e.ctrlKey||e.metaKey||e.shiftKey||multi)&&sel&&sel.t==="cell"){const i=sel.cells.findIndex(c=>c.key===key&&String(c.id)===String(id));if(i>=0)sel.cells.splice(i,1);else sel.cells.push({key,id});if(!sel.cells.length)sel=null}else sel={t:"cell",cells:[{key,id}]};updFmtBar();paintSel()}
+function toggleMulti(){multi=!multi;renderQuote()}
+function selectAllCols(){sel={t:"col",keys:outCols(printing).map(c=>c.key)};updFmtBar();paintSel()}
+function cellsToCols(){if(sel&&sel.t==="cell"){sel={t:"col",keys:[...new Set(sel.cells.map(c=>c.key))]};updFmtBar();paintSel()}}
+function selClear(){sel=null;updFmtBar();paintSel()}
+function updFmtBar(){const b=document.getElementById("fmtBar");b.style.display=sel?"flex":"none";if(!sel)return;const cell=sel.t==="cell",n=cell?sel.cells.length:sel.keys.length,f=colOf(cell?sel.cells[0].key:sel.keys[0]),st=getSt();document.getElementById("fmtTarget").textContent=cell?(n===1?"Cell · "+(f?f.label:""):n+" cells selected"):(n===1?"Column · "+(f?f.label:""):n+" columns selected");document.getElementById("fmtSize").textContent=(st.size||100)+"%";document.getElementById("fmtColor").value=st.color||"#222222";document.getElementById("fmtBold").checked=!!st.bold;document.getElementById("fmtScope").style.display=cell?"none":"";document.getElementById("fmtToCol").style.display=cell?"":"none"}
+function paintSel(){document.querySelectorAll("#itemsPreview .sel").forEach(e=>e.classList.remove("sel"));if(!sel)return;if(sel.t==="col")sel.keys.forEach(k=>document.querySelectorAll(`#itemsPreview [data-col="${k}"]`).forEach(e=>e.classList.add("sel")));else sel.cells.forEach(c=>document.querySelectorAll(`#itemsPreview tr[data-item-id="${c.id}"] td[data-col="${c.key}"]`).forEach(e=>e.classList.add("sel")))}
+function applySt(el,st){if(!st)return;if(st.size)el.style.fontSize=st.size+"%";if(st.color)el.style.color=st.color;if(st.bold)el.style.fontWeight="700"}
+const _rq5=renderQuote;renderQuote=function(){_rq5();const C=outCols(printing),b=document.getElementById("billPreview");
+ const kv=r=>r.map(([l,v])=>`<div class="kv"><b>${l}</b><span>:</span><span>${esc(v||"")}</span></div>`).join("");
+ if(b)b.innerHTML=kv([["Quotation No",val("quoteNo")],["Date",val("quoteDate")],["Valid Until",val("expiryDate")],["Customer Name",val("customerName")],["Address",val("customerAddress")],["GSTIN",val("customerGST")],["Contact",(val("contactPerson")+" "+val("customerMobile")).trim()],["Email",val("customerEmail")]]);
+ const pb=document.getElementById("partnerPreview");if(pb)pb.innerHTML=kv([["Partner Name",val("partnerName")],["Bank",val("bankName")],["Branch",val("bankBranch")],["A/C No",val("bankAccount")],["IFSC",val("bankIFSC")],["Order By",val("orderBy")],["Prepared By",val("preparedBy")]]);
+ document.querySelectorAll("#itemsPreview .items-table").forEach(tb=>{tb.querySelectorAll("thead th").forEach((th,k)=>{const c=C[k];if(!c)return;th.dataset.col=c.key;applySt(th,c.sth)});tb.querySelectorAll("tbody tr[data-item-id]").forEach(tr=>{const it=items.find(x=>String(x.id)===tr.dataset.itemId);tr.querySelectorAll("td").forEach((td,k)=>{const c=C[k];if(!c)return;td.dataset.col=c.key;applySt(td,Object.assign({},c.st,it&&it.cs&&it.cs[c.key]))})})});paintSel()};
+const _al2=applyLay;applyLay=function(){_al2();const p=document.getElementById("paper");[["company","company"],["head","head"],["text","text"],["notes","notes"],["totals","totals"]].forEach(([v,k])=>p.style.setProperty("--sz-"+v,eff(k)));p.style.setProperty("--sz-all",LAY.sz.master)};
+/* images: drag & drop (one or many files) */
+function setImageFromFile(id,f,done){const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,200/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.max(1,Math.round(im.width*k));c.height=Math.max(1,Math.round(im.height*k));const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);const it=items.find(z=>String(z.id)===String(id));if(it)it.image=c.toDataURL("image/jpeg",.8);done&&done()};im.src=r.result};r.readAsDataURL(f)}
+function pickImage(id){const inp=document.createElement("input");inp.type="file";inp.accept="image/*";inp.onchange=()=>{if(inp.files[0])setImageFromFile(id,inp.files[0],renderQuote)};inp.click()}
+function dropImages(id,files){const imgs=[...files].filter(f=>f.type.startsWith("image/"));if(!imgs.length){toast("Drop an image file (JPG, PNG, WebP)");return}let k=items.findIndex(z=>String(z.id)===String(id)),left=imgs.length;imgs.forEach((f,n)=>{const it=items[k+n];if(!it){left--;return}setImageFromFile(it.id,f,()=>{if(--left===0){renderQuote();toast(imgs.length>1?imgs.length+" images added to consecutive rows":"Image added")}})})}
+(function(){const T=document.getElementById("itemsPreview"),cell=e=>e.target.closest&&e.target.closest("td[data-img]");
+ T.addEventListener("dragover",e=>{const td=cell(e);if(td){e.preventDefault();td.classList.add("dragover")}});T.addEventListener("dragleave",e=>{const td=cell(e);td&&td.classList.remove("dragover")});
+ T.addEventListener("drop",e=>{const td=cell(e);if(!td)return;e.preventDefault();td.classList.remove("dragover");dropImages(td.dataset.img,e.dataTransfer.files)});
+ ["dragover","drop"].forEach(n=>addEventListener(n,e=>{if(!cell(e))e.preventDefault()}));
+ T.addEventListener("click",e=>{if(e.target.closest(".img-x,.img-add,.editor-table-actions"))return;const th=e.target.closest("th[data-col]");if(th){pickCol(th.dataset.col,e);return}const td=e.target.closest("td[data-col]");if(td&&!td.matches("[data-img]"))pickCell(td.dataset.col,td.closest("tr").dataset.itemId,e)});
+ drawSz();updFmtBar()})();
+renderQuote();
+</script>
+<script>
+/* ===== v9: defaults, multi-select ===== */
+const rj=k=>{try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}};
+function syncLayUI(){document.getElementById("layAccent").value=LAY.accent;document.getElementById("layOrient").value=LAY.orient;document.getElementById("layPaper").value=LAY.paper||"a4";document.querySelectorAll("#layoutPanel [data-k]").forEach(c=>c.checked=!LAY.hide[c.dataset.k])}
+function applyDefaults(l,c){Object.keys(LAY).forEach(k=>delete LAY[k]);Object.assign(LAY,JSON.parse(JSON.stringify(l)));LAY.hide=LAY.hide||{};LAY.sz=Object.assign({},FACTORY_SZ,LAY.sz||{});cols=JSON.parse(JSON.stringify(c));layStore();saveCols();syncLayUI();drawSz();renderQuote()}
+function saveDefaults(){try{localStorage.setItem("tbhs_defaults",JSON.stringify({lay:LAY,cols:cols}));toast("Saved as default for all formats (A, B and C)")}catch(e){toast("Could not save default")}}
+function restoreDefaults(){const d=rj("tbhs_defaults");if(!d||!d.lay||!d.cols){toast("No saved default yet — restoring factory settings");factoryReset();return}applyDefaults(d.lay,d.cols);toast("Back to your saved default")}
+function factoryReset(){applyDefaults(FACTORY,DEFAULT_COLS);toast("Factory settings restored")}
+syncLayUI();
+renderQuote();
+document.querySelectorAll(".mock-logo-img").forEach(i=>i.src=TBHS_LOGO);
+</script>
+<script>
+/* ===== v10: letterhead (one-line name, editable contact line, tagline strip) ===== */
+const coGet=()=>Object.assign({addr:"",phone:"",email:""},rj("tbhs_company")||{});
+function coLine(){const c=coGet();return[c.addr,c.phone&&"Phone: "+c.phone,c.email&&"Email: "+c.email].filter(Boolean).join("   |   ")}
+function companySave(){try{localStorage.setItem("tbhs_company",JSON.stringify({addr:val("companyAddr"),phone:val("companyPhone"),email:val("companyEmail")}))}catch(e){}renderQuote()}
+const _rq6=renderQuote;renderQuote=function(){_rq6();const h=document.getElementById("headContact"),l=coLine();if(h)h.innerHTML=l?esc(l):'<span class="no-print head-hint">Add address · phone · email in the Details tab</span>'};
+(function(){const c=coGet();document.getElementById("companyAddr").value=c.addr;document.getElementById("companyPhone").value=c.phone;document.getElementById("companyEmail").value=c.email})();
+renderQuote();
+</script>
+<script>
+/* ===== v11: new shell logic ===== */
+const $id=i=>document.getElementById(i),ED="#itemsEditor";
+let skipEd=false,edMore=false,pvMode="fit",pvZ=1,tmrP,tmrD;
+const MORE=["type","image","brand","model"];
+const edCols=()=>outCols(false).filter(c=>c.type!=="auto"&&(edMore||!MORE.includes(c.key)));
+function edCell(i,c){const k=c.key,ic=c.internal?" icol":"";
+ if(c.type==="formula")return`<td class="ed-calc${ic}" data-col="${k}" data-calc="${k}">${esc(fmtVal(cellVal(i,c,0),c))}</td>`;
+ if(c.type==="image")return`<td class="ed-img${ic}" data-col="${k}" data-img="${i.id}">${i.image?`<img src="${i.image}" alt=""><span class="ed-x" title="Remove image">×</span>`:"<span>＋</span>"}</td>`;
+ const w=k==="name"?220:k==="code"?100:k==="unit"||k==="gst"||k==="qty"?62:86;
+ return`<td class="${ic}" data-col="${k}" style="min-width:${w}px"><input ${c.type==="number"?'type="number" step="any"':""} data-f="${k}" value="${esc(i[k]??"")}"></td>`}
+function renderEditor(){const C=edCols(),T=document.querySelector(ED),act=document.activeElement,keep=act&&act.dataset&&act.dataset.f?{id:act.closest("tr").dataset.id,f:act.dataset.f}:null;
+ T.innerHTML=`<thead><tr><th class="ed-n">#</th><th style="min-width:110px">Section</th>${C.map(c=>`<th data-col="${c.key}" class="${c.internal?"icol":""}" title="Click to select this column for text styling">${esc(c.label)}</th>`).join("")}<th></th></tr></thead><tbody>${items.map((i,n)=>`<tr data-id="${i.id}"><td class="ed-n">${n+1}</td><td><input list="secList" data-f="section" value="${esc(i.section||"")}"></td>${C.map(c=>edCell(i,c)).join("")}<td class="ed-a"><button title="Duplicate line" onclick="dupItem('${i.id}')">⧉</button><button title="Remove line" onclick="delItem('${i.id}')">🗑</button></td></tr>`).join("")}</tbody>`;
+ $id("apEmpty").hidden=items.length>0;$id("edWrap").hidden=!items.length;
+ $id("secList").innerHTML=[...new Set(["CROCKERY","CUTLERY","GLASSWARE","HOLLOWARE",...items.map(i=>i.section).filter(Boolean)])].map(s=>`<option value="${esc(s)}">`).join("");
+ if(keep){const el=T.querySelector(`tr[data-id="${keep.id}"] [data-f="${keep.f}"]`);el&&el.focus()}paintSel()}
+function updRowCalc(){document.querySelectorAll(ED+" tbody tr[data-id]").forEach(tr=>{const it=itOf(tr.dataset.id);if(!it)return;tr.querySelectorAll("[data-calc]").forEach(td=>{const c=colOf(td.dataset.calc);if(c)td.textContent=fmtVal(cellVal(it,c,0),c)})})}
+function updateSummary(){const t=computeTotals();$id("tBasic").textContent=money(t.basic);$id("tDisc").textContent=(t.disc?"− ":"")+money(t.disc);$id("tGst").textContent=money(t.gst);$id("tTotal").textContent=money(t.total);$id("itemCount").textContent=items.length}
+function liveUpdate(){updRowCalc();updateSummary();clearTimeout(tmrP);tmrP=setTimeout(()=>{skipEd=true;renderQuote();skipEd=false},140)}
+function dupItem(id){const i=itOf(id);if(!i)return;items.splice(items.indexOf(i)+1,0,Object.assign({},i,{id:Date.now()+Math.random()}));renderQuote()}
+function delItem(id){const i=itOf(id);if(i&&confirm("Remove this line from the quotation?")){items.splice(items.indexOf(i),1);renderQuote()}}
+/* add-product search */
+function apHits(){const q=$id("apSearch").value.toLowerCase().trim();return catalogue.filter(p=>!q||[p.name,p.brand,p.code,p.model,p.category].join(" ").toLowerCase().includes(q))}
+function apFind(){const b=$id("apResults"),L=apHits().slice(0,8);b.innerHTML=L.length?L.map(p=>`<div class="ap-res" onmousedown="event.preventDefault();addFromCatalogue(${p.id})"><b>${esc(p.name)}</b><small>${esc(p.brand||"")} · ${esc(p.code||"")} · ${esc(p.model||"")} · ${num(p.discount)}% off</small><span>${money(p.rate)}</span></div>`).join(""):'<div class="ap-res empty">No match. Import a price list or add a new product below.</div>';b.hidden=false}
+function apKey(e){if(e.key==="Escape"){$id("apResults").hidden=true;e.target.blur()}if(e.key==="Enter"){const p=apHits()[0];if(p){e.preventDefault();addFromCatalogue(p.id)}}}
+const _apd=addProduct;addProduct=function(p){_apd(p);setTimeout(()=>{const q=document.querySelector(ED+" tbody tr:last-child [data-f='qty']");if(q){q.focus();q.select()}},30)};
+/* preview zoom */
+function pvApply(){const sc=$id("pvScroll"),p=$id("paper");if(!sc||!p)return;p.style.zoom=1;const w=p.offsetWidth||794;let z=pvMode==="fit"?Math.min(1.2,(sc.clientWidth-30)/w):pvZ;z=Math.max(.3,z||1);p.style.zoom=z;$id("pvZ").textContent=Math.round(z*100)+"%"}
+function pvZoom(d){if(pvMode==="fit"){pvZ=parseFloat($id("paper").style.zoom)||1;pvMode="manual"}pvZ=Math.max(.3,Math.min(1.6,pvZ+d*.1));pvApply()}
+function pvFit(){pvMode="fit";pvApply()}
+addEventListener("resize",pvApply);
+/* navigation */
+const NAVP=[["Home","Dashboard"],["Quotations","Manage Quotations"],["Catalogue","Product Catalogue"],["Customers","Customers"],["Employees","Employees"],["Reports","Reports / Export"],["Settings","Settings"]];
+$id("apNav").innerHTML=NAVP.map(([l,p])=>`<button data-p="${p}" onclick="showAppPage('${p}')">${l}</button>`).join("");
+const apNavSet=p=>document.querySelectorAll("#apNav button").forEach(b=>b.classList.toggle("on",b.dataset.p===p));
+function goEditor(){$id("navPage").style.display="none";$id("viewEditor").hidden=false;apNavSet("");setFormat(currentFormat);window.scrollTo(0,0);setTimeout(pvApply,30)}
+const _spn=showAppPage;showAppPage=function(p){if(p==="Create Quotation"){goEditor();return}$id("viewEditor").hidden=true;$id("drawer").hidden=true;_spn(p);apNavSet(p)};
+startCreate=goEditor;backToFormats=function(){showAppPage("Dashboard")};chooseLandingFormat=function(f){landingFormat=f};
+function newQuote(silent){const n=readSavedQuotes().length+1,st=(typeof getSettings==="function"?getSettings():{})||{};$id("quoteNo").value="QT-TBHS-EQP-"+String(n).padStart(6,"0");$id("quoteDate").value=dateISO(0);$id("expiryDate").value=dateISO(num(st.validity||15));["customerName","customerAddress","customerGST","contactPerson","customerMobile","customerEmail","orderBy","preparedBy"].forEach(i=>$id(i).value="");$id("globalDiscount").value=0;items=[];try{localStorage.removeItem("tbhs_draft")}catch(e){}$id("viewEditor").hidden=false;goEditor();renderQuote();if(!silent)toast("New quotation started")}
+function toggleDrawer(){const d=$id("drawer");d.hidden=!d.hidden}togglePanel=toggleDrawer;openPanel=function(){};panelTab=function(){};
+/* editing wiring */
+enableCellEditing=function(){};
+(function(){const T=document.querySelector(ED);
+ T.addEventListener("input",e=>{const t=e.target,f=t.dataset&&t.dataset.f;if(!f)return;const it=itOf(t.closest("tr").dataset.id);if(!it)return;it[f]=t.type==="number"?(t.value===""?"":num(t.value)):t.value;liveUpdate()});
+ T.addEventListener("change",e=>{if(e.target.dataset&&e.target.dataset.f==="section")renderQuote()});
+ T.addEventListener("keydown",e=>{const t=e.target,f=t.dataset&&t.dataset.f;if(!f||!["Enter","ArrowDown","ArrowUp"].includes(e.key))return;const tr=t.closest("tr"),n=e.key==="ArrowUp"?tr.previousElementSibling:tr.nextElementSibling;if(!n&&e.key==="Enter"){e.preventDefault();addBlank();setTimeout(()=>{const l=T.querySelector("tbody tr:last-child [data-f='"+f+"']");l&&l.focus()},0);return}if(n){const x=n.querySelector("[data-f='"+f+"']");if(x){e.preventDefault();x.focus();x.select&&x.select()}}});
+ T.addEventListener("click",e=>{const x=e.target.closest(".ed-x");if(x){delImg(x.closest("td").dataset.img);return}const im=e.target.closest("td.ed-img");if(im){pickImage(im.dataset.img);return}const th=e.target.closest("th[data-col]");if(th)pickCol(th.dataset.col,e)});
+ const ic=e=>e.target.closest&&e.target.closest("td.ed-img");
+ T.addEventListener("dragover",e=>{const td=ic(e);if(td){e.preventDefault();td.classList.add("dragover")}});T.addEventListener("dragleave",e=>{const td=ic(e);td&&td.classList.remove("dragover")});
+ T.addEventListener("drop",e=>{const td=ic(e);if(!td)return;e.preventDefault();td.classList.remove("dragover");dropImages(td.dataset.img,e.dataTransfer.files)});
+ document.addEventListener("keydown",e=>{if(e.key==="/"&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)&&!$id("viewEditor").hidden){e.preventDefault();$id("apSearch").focus()}});
+ $id("paper").addEventListener("dblclick",e=>{if(e.target.closest("#itemsPreview"))return;const M=[[".paper-head","companyAddr"],["#billPreview","customerName"],["#partnerPreview","partnerName"],["#specPreview","specifications"],["#termsPreview","terms"]];for(const[s,id]of M){if(e.target.closest(s)){const el=$id(id);let d=el.closest("details");if(d)d.open=true;if(id==="companyAddr")$id("drawer").hidden=false;el.scrollIntoView({block:"center",behavior:"smooth"});el.focus();return}}});
+ enableStudioEditing=function(){}})();
+const _ps=paintSel;paintSel=function(){_ps();document.querySelectorAll(ED+" .sel").forEach(e=>e.classList.remove("sel"));if(sel&&sel.t==="col")sel.keys.forEach(k=>document.querySelectorAll(ED+" [data-col='"+k+"']").forEach(e=>e.classList.add("sel")))};
+const _dc=drawChips;drawChips=function(){_dc();const el=$id("colChips");if(el)el.insertAdjacentHTML("afterbegin",`<button class="chip ${edMore?"on":""}" onclick="edMore=!edMore;renderQuote()" title="Type, Image, Make and Model columns">${edMore?"✓":"＋"} Type · Image · Make · Model</button>`)};
+/* drafts + guards */
+const saveDraft=()=>{try{localStorage.setItem("tbhs_draft",JSON.stringify(quoteData()));$id("saveState").textContent="Draft saved ✓"}catch(e){}};
+function loadDraft(){const q=rj("tbhs_draft");if(!q||!Array.isArray(q.items))return false;FIELD_IDS.forEach(i=>{const el=$id(i);if(el&&q.fields&&q.fields[i]!==undefined)el.value=q.fields[i]});items=q.items;if(q.globalDiscount!==undefined)$id("globalDiscount").value=q.globalDiscount;if(q.format)currentFormat=q.format;return true}
+const _rq11=renderQuote;renderQuote=function(){_rq11();if(!skipEd)renderEditor();updateSummary();$id("saveState").textContent="Unsaved changes…";clearTimeout(tmrD);tmrD=setTimeout(saveDraft,700);requestAnimationFrame(pvApply)};
+[["exportPDF"],["exportExcel"],["exportCSV"]].forEach(([n])=>{const f=window[n];window[n]=function(){if(!items.length){toast("Add at least one product before downloading");return}if(!val("customerName").trim())toast("Tip: customer name is empty");f()}});
+renderCatalogue=function(){};
+if(loadDraft()){$id("viewEditor").hidden=false;goEditor();renderQuote()}else newQuote(true);
+</script>
+</body>
+</html>
